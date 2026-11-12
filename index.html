@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tiệm Rèm Thu Hương - 129 Điện Biên Phủ, Nam Phước, Quảng Nam</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,22 +12,22 @@
                 extend: {
                     colors: {
                         burgundy: {
-                            50: '#FBF2F4',
-                            100: '#F7E6E9',
+                            500: '#9B1B30',
                             600: '#7A1C2E',
                             700: '#631322',
                             800: '#4D0F1B',
-                            900: '#380B14'
+                            900: '#380711',
                         },
                         cream: {
                             50: '#FDFBF7',
                             100: '#F5F0EB',
                             200: '#EBE2D8',
-                            300: '#DFD2C2'
+                            300: '#DED3C4'
                         },
                         gold: {
+                            400: '#E5B869',
                             500: '#C59B27',
-                            600: '#A9811C'
+                            600: '#A47E18'
                         }
                     }
                 }
@@ -38,28 +38,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        
-        :root {
-            --red-brand: #7A1C2E;
-            --red-deep: #4D0F1B;
-            --red-soft: #FBF2F4;
-            --beige-bg: #F5F0EB;
-            --beige-card: #FDFBF7;
-            --beige-border: #EBE2D8;
-            --gold: #C59B27;
-        }
-
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #F5F0EB;
             color: #2D2D2D;
             overflow-x: hidden;
         }
-        
         h1, h2, h3, h4, .font-serif {
             font-family: 'Playfair Display', serif;
         }
-
         @keyframes marquee {
             0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
@@ -73,144 +60,61 @@
             animation-play-state: paused;
         }
 
-        /* Tùy biến Style Mini-Game */
-        .game-diorama-container {
-            background: #FDFBF7;
-            border-radius: 28px;
-            border: 3px solid #fff;
-            box-shadow: 0 20px 50px rgba(77, 15, 27, 0.16);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 620px;
+        /* 3D Perspective Room styling */
+        .room-viewport-3d {
+            perspective: 1000px;
+        }
+        .room-cube {
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .shop-awning-pattern {
-            height: 12px;
-            background: repeating-linear-gradient(
-                -45deg,
-                #7A1C2E,
-                #7A1C2E 18px,
-                #FFF 18px,
-                #FFF 36px
-            );
-        }
-
-        .game-screen {
-            display: none;
-            flex-direction: column;
-            justify-content: space-between;
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-        .game-screen.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Khung Cửa Sổ Mô Phỏng Trong Game */
-        .mini-window-stage {
-            width: 100%;
-            height: 230px;
-            background: #F8F4EC;
-            border: 6px solid #4a2e2b;
-            border-radius: 12px;
+        /* Gamification specific CSS */
+        .tape-track {
+            background: #EBE2D8;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.12);
+            border: 1.5px solid #DED3C4;
         }
-
-        .window-cross-mullions {
-            position: absolute;
-            inset: 0;
-            border: 2px solid #5a3834;
-            pointer-events: none;
-            z-index: 10;
-        }
-        .window-cross-mullions::before {
-            content: "";
-            position: absolute;
-            top: 0; bottom: 0; left: 50%;
-            width: 3px;
-            background: #5a3834;
-        }
-        .window-cross-mullions::after {
-            content: "";
-            position: absolute;
-            left: 0; right: 0; top: 40%;
-            height: 3px;
-            background: #5a3834;
-        }
-
-        /* Lớp rèm ảo thả xuống */
-        .curtain-live-fitting {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-            transition: all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            transform: translateY(-100%);
-        }
-        .curtain-live-fitting.dropped {
-            transform: translateY(0);
-        }
-
-        /* Rèm Style */
-        .curtain-blackout {
-            background: repeating-linear-gradient(90deg, #7A1C2E, #7A1C2E 18px, #4D0F1B 26px, #9b283e 36px);
-            box-shadow: inset 0 -10px 25px rgba(0,0,0,0.45);
-        }
-        .curtain-voan {
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(2px);
-            box-shadow: inset 0 0 15px rgba(255,255,255,0.9);
-            border-bottom: 4px solid rgba(255,255,255,0.8);
-        }
-        .curtain-cuon {
-            background: linear-gradient(to bottom, #d6c6b2, #f3ece2);
-            border-bottom: 8px solid #8c7358;
-            box-shadow: 0 5px 12px rgba(0,0,0,0.2);
-        }
-        .curtain-nhom {
-            background: repeating-linear-gradient(0deg, #b0bec5, #cfd8dc 12px, #78909c 13px);
-        }
-        .curtain-roman {
-            background: repeating-linear-gradient(0deg, #8c6d58, #bcaaa4 36px, #4e342e 38px);
-        }
-        .curtain-cauvong {
-            background: repeating-linear-gradient(0deg, rgba(122, 28, 46, 0.85) 0px, rgba(122, 28, 46, 0.85) 20px, rgba(255,255,255,0.4) 20px, rgba(255,255,255,0.4) 38px);
-        }
-
-        /* Thước đo mini */
-        .tape-track-box {
-            width: 100%;
-            height: 42px;
-            background: #ebdcc9;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-            border: 1.5px solid #c9b79f;
-        }
-        .tape-fill-bar {
+        .tape-bar {
             height: 100%;
             width: 0%;
-            background: repeating-linear-gradient(90deg, #7A1C2E, #7A1C2E 9px, #ffd54f 10px, #ffd54f 11px);
+            background: repeating-linear-gradient(90deg, #7A1C2E, #7A1C2E 9px, #C59B27 10px, #C59B27 11px);
         }
-        .tape-target-zone {
+        .target-zone {
             position: absolute;
             top: 0; left: 78%; width: 14%; height: 100%;
-            background: rgba(46, 125, 50, 0.6);
+            background: rgba(46, 125, 50, 0.55);
             border: 2px dashed #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             color: #fff;
+        }
+
+        /* Curtain styles in diorama */
+        .curtain-blackout {
+            background: repeating-linear-gradient(90deg, #7A1C2E, #7A1C2E 18px, #4D0F1B 26px, #9B1B30 36px);
+            box-shadow: inset 0 -12px 20px rgba(0,0,0,0.4);
+        }
+        .curtain-voan {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(2px);
+            box-shadow: inset 0 0 15px rgba(255,255,255,0.9);
+            border-bottom: 4px solid rgba(255,255,255,0.7);
+        }
+        .curtain-cuon {
+            background: linear-gradient(to bottom, #d6c6b2, #f5f0eb);
+            border-bottom: 8px solid #a38d74;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.18);
+        }
+        .curtain-nhom {
+            background: repeating-linear-gradient(0deg, #b0bec5, #cfd8dc 12px, #78909c 13px);
+        }
+        .curtain-cauvong {
+            background: repeating-linear-gradient(0deg, rgba(122, 28, 46, 0.85) 0px, rgba(122, 28, 46, 0.85) 20px, rgba(255,255,255,0.3) 20px, rgba(255,255,255,0.3) 36px);
         }
     </style>
 </head>
@@ -220,34 +124,35 @@
     <header class="sticky top-0 z-50 bg-cream-50/95 backdrop-blur-md border-b border-burgundy-600/20 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-11 h-11 rounded-full bg-burgundy-600 text-white flex items-center justify-center font-serif text-xl font-bold shadow-md ring-2 ring-gold-500/50">
+                <div class="w-10 h-10 rounded-full bg-burgundy-600 text-white flex items-center justify-center font-serif text-xl font-bold shadow-md">
                     TH
                 </div>
                 <div>
                     <h1 class="font-serif text-xl font-bold tracking-wide text-burgundy-800">Tiệm Rèm Thu Hương</h1>
-                    <p class="text-xs text-neutral-500 tracking-wider uppercase">129 Điện Biên Phủ, Nam Phước, Quảng Nam</p>
+                    <p class="text-[11px] text-neutral-500 tracking-wider uppercase">129 Điện Biên Phủ, Nam Phước, Quảng Nam</p>
                 </div>
             </div>
             
             <nav class="hidden lg:flex items-center space-x-7 text-sm font-medium">
                 <a href="#trang-chu" class="hover:text-burgundy-600 transition-colors">Trang Chủ</a>
-                <a href="#mini-game" class="text-burgundy-700 font-bold hover:text-burgundy-800 transition-colors flex items-center gap-1.5 bg-burgundy-50 px-3 py-1 rounded-full border border-burgundy-600/20">
-                    <i class="fa-solid fa-gamepad text-gold-500"></i> Thử Thách Thợ Rèm
-                </a>
                 <a href="#bo-suu-tap" class="hover:text-burgundy-600 transition-colors">Bộ Sưu Tập</a>
-                <a href="#phong-ao-ai" class="hover:text-burgundy-600 transition-colors font-semibold text-neutral-700">
-                    <i class="fa-solid fa-wand-magic-sparkles mr-1 text-burgundy-600"></i> Phòng Ảo AI
+                <a href="#phong-ao-ai" class="hover:text-burgundy-600 transition-colors font-semibold text-burgundy-700">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Thử Rèm AI & 3D
+                </a>
+                <a href="#mini-game" class="hover:text-burgundy-600 transition-colors text-amber-700 font-semibold flex items-center">
+                    <i class="fa-solid fa-gamepad mr-1.5 text-burgundy-600"></i> Thử Thách Thợ Rèm
+                    <span class="ml-1.5 px-2 py-0.5 text-[10px] bg-red-100 text-burgundy-700 rounded-full font-bold">Tặng Voucher</span>
                 </a>
                 <a href="#tinh-gia" class="hover:text-burgundy-600 transition-colors">Tính Chi Phí</a>
-                <a href="#lien-he" class="hover:text-burgundy-600 transition-colors">Liên Hệ Zalo</a>
+                <a href="#lien-he" class="hover:text-burgundy-600 transition-colors">Liên Hệ</a>
             </nav>
 
             <div class="flex items-center space-x-3">
-                <a href="tel:0383818553" class="hidden sm:inline-flex items-center text-xs font-bold text-burgundy-800 bg-cream-200/70 px-3.5 py-2 rounded-full border border-burgundy-600/20">
-                    <i class="fa-solid fa-phone mr-2 text-burgundy-600"></i> 0383.818.553
-                </a>
-                <a href="#lien-he" class="bg-burgundy-600 hover:bg-burgundy-700 text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-md transition-all transform hover:-translate-y-0.5">
-                    Tư Vấn Tận Nơi
+                <button onclick="openAuthModal()" class="text-xs font-semibold text-neutral-700 hover:text-burgundy-600 px-3 py-2 transition">
+                    <i class="fa-regular fa-user mr-1"></i> Đăng nhập / Tích điểm
+                </button>
+                <a href="#lien-he" class="bg-burgundy-600 hover:bg-burgundy-700 text-white px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium shadow-md transition-all transform hover:-translate-y-0.5 flex items-center">
+                    <i class="fa-solid fa-phone mr-1.5"></i> <span>Tư Vấn Tận Nơi</span>
                 </a>
             </div>
         </div>
@@ -260,26 +165,26 @@
                 <div class="space-y-6">
                     <div class="inline-flex items-center space-x-2 bg-burgundy-600/10 text-burgundy-800 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase border border-burgundy-600/20">
                         <i class="fa-solid fa-crown text-gold-500"></i>
-                        <span>Đẳng Cấp Không Gian Sống Quảng Nam</span>
+                        <span>Đẳng Cấp Không Gian Sống</span>
                     </div>
                     <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 leading-tight">
-                        Thiết Kế Đo May <span class="text-burgundy-600 italic">Màn Rèm</span> Tinh Hoa
+                        Thiết Kế Đo May <span class="text-burgundy-600 italic">Màn Rèm</span> Nghệ Thuật
                     </h2>
                     <p class="text-neutral-600 text-base sm:text-lg leading-relaxed">
-                        Chuyên tư vấn, may đo và thi công rèm cửa sang trọng tại 129 Điện Biên Phủ, Nam Phước, Quảng Nam, Đà Nẵng dưới kinh nghiệm hơn 10 năm của anh Thái Quốc Tân. Mang lại sự êm ái, cách nhiệt hoàn mỹ cho từng ô cửa.
+                        Chuyên tư vấn, thiết kế và thi công rèm cửa cao cấp tại <strong>129 Điện Biên Phủ, Nam Phước, Quảng Nam, Đà Nẵng</strong> và các khu vực lân cận. Hơn 10 năm kinh nghiệm may đo tinh tế, mang lại vẻ đẹp ấm cúng, sang trọng tuyệt đối cho từng khung cửa.
                     </p>
-                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 pt-3">
-                        <a href="#mini-game" class="bg-burgundy-600 hover:bg-burgundy-700 text-white text-center px-7 py-3.5 rounded-xl font-medium shadow-lg shadow-burgundy-600/20 transition-all flex items-center justify-center">
-                            <i class="fa-solid fa-trophy mr-2 text-gold-500"></i> Chơi Game Nhận Voucher 10%
-                        </a>
-                        <a href="#phong-ao-ai" class="border-2 border-burgundy-600 text-burgundy-700 hover:bg-burgundy-600 hover:text-white text-center px-7 py-3.5 rounded-xl font-medium transition-all flex items-center justify-center">
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
+                        <a href="#phong-ao-ai" class="bg-burgundy-600 hover:bg-burgundy-700 text-white text-center px-8 py-3.5 rounded-xl font-medium shadow-lg shadow-burgundy-600/20 transition-all flex items-center justify-center">
                             <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Trải Nghiệm AI Thử Rèm
+                        </a>
+                        <a href="#mini-game" class="bg-gold-500 hover:bg-gold-600 text-neutral-900 text-center px-7 py-3.5 rounded-xl font-bold transition-all shadow-md flex items-center justify-center">
+                            <i class="fa-solid fa-trophy mr-2 text-burgundy-800"></i> Mini Game Thử Thách Rèm
                         </a>
                     </div>
                     <div class="grid grid-cols-3 gap-4 pt-6 border-t border-neutral-200">
                         <div>
                             <p class="font-serif text-2xl font-bold text-burgundy-800">10+ Năm</p>
-                            <p class="text-xs text-neutral-500">Uy tín thợ lành nghề</p>
+                            <p class="text-xs text-neutral-500">Kinh nghiệm may đo</p>
                         </div>
                         <div>
                             <p class="font-serif text-2xl font-bold text-burgundy-800">1000+</p>
@@ -287,7 +192,7 @@
                         </div>
                         <div>
                             <p class="font-serif text-2xl font-bold text-burgundy-800">Miễn Phí</p>
-                            <p class="text-xs text-neutral-500">Đo & mang mẫu tận nhà</p>
+                            <p class="text-xs text-neutral-500">Đo đạc & Lắp đặt tận nơi</p>
                         </div>
                     </div>
                 </div>
@@ -296,8 +201,8 @@
                         <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" alt="Không gian rèm cửa sang trọng" class="w-full h-[450px] object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-6">
                             <div class="text-white">
-                                <span class="bg-burgundy-600 text-xs px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Thái Quốc Tân - 129 Điện Biên Phủ, Nam Phước</span>
-                                <h3 class="font-serif text-2xl font-bold mt-2">Hoàn Mỹ Từng Nếp Sóng Rèm</h3>
+                                <span class="bg-burgundy-600 text-[11px] px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Tiệm Rèm Thu Hương - Nam Phước</span>
+                                <h3 class="font-serif text-2xl font-bold mt-2">Đẳng Cấp Sang Trọng & Hoàn Mỹ</h3>
                             </div>
                         </div>
                     </div>
@@ -307,540 +212,53 @@
     </section>
 
     <!-- Running Marquee Slider -->
-    <div class="bg-burgundy-800 py-3.5 overflow-hidden shadow-inner">
+    <div class="bg-burgundy-800 py-3.5 overflow-hidden shadow-inner border-y border-burgundy-900">
         <div class="animate-marquee flex space-x-8 whitespace-nowrap text-white items-center text-sm font-medium tracking-wider">
-            <span class="flex items-center"><i class="fa-solid fa-star text-amber-400 mr-2"></i> Rèm Vải 2 Lớp Cản Sáng 100%</span>
-            <span class="flex items-center"><i class="fa-solid fa-star text-amber-400 mr-2"></i> Rèm Cầu Vồng Hàn Quốc Modero</span>
-            <span class="flex items-center"><i class="fa-solid fa-star text-amber-400 mr-2"></i> Khảo Sát & Đo Đạc Tận Nơi Miễn Phí Nam Phước - Quảng Nam</span>
-            <span class="flex items-center"><i class="fa-solid fa-star text-amber-400 mr-2"></i> Rèm Sáo Gỗ Tự Nhiên Chống Mối Mọt</span>
-            <span class="flex items-center"><i class="fa-solid fa-star text-amber-400 mr-2"></i> Hotline / Zalo Anh Tân: 0383.818.553</span>
-            <span class="flex items-center"><i class="fa-solid fa-star text-amber-400 mr-2"></i> Rèm Cuốn Văn Phòng Chống Nắng Tối Đa</span>
+            <span class="flex items-center"><i class="fa-solid fa-star text-gold-400 mr-2"></i> Rèm Vải 2 Lớp Cao Cấp</span>
+            <span class="flex items-center"><i class="fa-solid fa-star text-gold-400 mr-2"></i> Rèm Cầu Vồng Hàn Quốc Modero</span>
+            <span class="flex items-center"><i class="fa-solid fa-star text-gold-400 mr-2"></i> Rèm Sáo Gỗ Tự Nhiên Chống Ẩm</span>
+            <span class="flex items-center"><i class="fa-solid fa-star text-gold-400 mr-2"></i> Rèm Cuốn Chống Nắng Văn Phòng</span>
+            <span class="flex items-center"><i class="fa-solid fa-star text-gold-400 mr-2"></i> Khảo Sát & Đo Đạc Tận Nơi Miễn Phí</span>
+            <span class="flex items-center"><i class="fa-solid fa-star text-gold-400 mr-2"></i> Hotline Tiệm Rèm Thu Hương: 0383.818.553</span>
+            <span class="flex items-center"><i class="fa-solid fa-star text-gold-400 mr-2"></i> Rèm Vải 2 Lớp Cao Cấp</span>
+            <span class="flex items-center"><i class="fa-solid fa-star text-gold-400 mr-2"></i> Rèm Cầu Vồng Hàn Quốc Modero</span>
         </div>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- GAMIFICATION SECTION: THỬ THÁCH NGHỆ NHÂN THỢ RÈM THU HƯƠNG               -->
-    <!-- ========================================================================= -->
-    <section id="mini-game" class="py-20 bg-gradient-to-b from-cream-50 via-cream-100 to-cream-50 border-b border-burgundy-600/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                
-                <!-- Cột giới thiệu mini game (5 cols) -->
-                <div class="lg:col-span-5 space-y-6">
-                    <div class="inline-flex items-center space-x-2 bg-burgundy-600/10 text-burgundy-800 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border border-burgundy-600/20">
-                        <i class="fa-solid fa-gamepad text-gold-500"></i>
-                        <span>Trải Nghiệm Tương Tác Gamification</span>
-                    </div>
-                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-neutral-900 leading-tight">
-                        Thử Tài <span class="text-burgundy-600 italic">Thợ Rèm</span><br>Nhận Quà May Đo Khủng
-                    </h2>
-                    <p class="text-neutral-600 text-sm leading-relaxed">
-                        Bạn có từng thắc mắc vì sao quy trình lắp rèm tại <strong>Thu Hương</strong> lại đạt độ tinh chuẩn từng milimet? Hãy tự tay trải nghiệm 3 chặng thử thách thực tế của một người thợ lành nghề:
-                    </p>
-
-                    <div class="space-y-3.5">
-                        <div class="flex items-start space-x-3 bg-white p-3.5 rounded-xl border border-cream-200 shadow-sm">
-                            <span class="w-7 h-7 rounded-full bg-burgundy-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">1</span>
-                            <div>
-                                <h4 class="font-bold text-xs text-neutral-900">Kéo Thước Cắt Đo Chuẩn Xác</h4>
-                                <p class="text-[11px] text-neutral-500">Căn chuẩn vạch xanh milimet để rèm không hở sáng hoặc chạm đất.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 bg-white p-3.5 rounded-xl border border-cream-200 shadow-sm">
-                            <span class="w-7 h-7 rounded-full bg-burgundy-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">2</span>
-                            <div>
-                                <h4 class="font-bold text-xs text-neutral-900">Bắn Vít Gia Cố Xương Thạch Cao</h4>
-                                <p class="text-[11px] text-neutral-500">Chọn đúng nở bướm chuyên dụng để bộ rèm 15kg không tụt sập.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 bg-white p-3.5 rounded-xl border border-cream-200 shadow-sm">
-                            <span class="w-7 h-7 rounded-full bg-burgundy-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">3</span>
-                            <div>
-                                <h4 class="font-bold text-xs text-neutral-900">Phối Rèm Cho 5 Không Gian Random</h4>
-                                <p class="text-[11px] text-neutral-500">Ướm thử rèm trực tiếp lên khung cửa, chọn đúng công năng để thông qua nghiệm thu.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl flex items-center space-x-3">
-                        <span class="text-3xl">🎁</span>
-                        <div>
-                            <p class="text-xs font-bold text-burgundy-800">Phần Thưởng Sau Khi Hoàn Thành:</p>
-                            <p class="text-[11px] text-neutral-600">Nhận ngay <strong>Voucher giảm 10%</strong> + <strong>Gói giặt bảo dưỡng rèm 1 năm</strong> + Mang mẫu tận nhà miễn phí!</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cột giao diện Kiosk Mini-Game (7 cols) -->
-                <div class="lg:col-span-7 flex justify-center">
-                    <div class="w-full max-w-[440px] game-diorama-container relative">
-                        <!-- Mái hiên tiệm rèm -->
-                        <div class="shop-awning-pattern"></div>
-
-                        <!-- Header Kiosk -->
-                        <div class="px-5 py-3.5 bg-white border-b border-cream-200 flex justify-between items-center">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-8 h-8 rounded-lg bg-burgundy-50 border border-burgundy-600/20 text-burgundy-600 flex items-center justify-center font-bold text-sm">🪡</span>
-                                <div>
-                                    <h4 class="font-serif font-bold text-sm text-burgundy-800 leading-none">Thu Hương Workshop</h4>
-                                    <span class="text-[9px] uppercase tracking-wider font-bold text-gold-600">Thử Thách Thợ Rèm</span>
-                                </div>
-                            </div>
-                            <span id="gameProgressBadge" class="text-xs font-bold bg-burgundy-50 text-burgundy-800 border border-burgundy-600/20 px-3 py-1 rounded-full">Khởi Động</span>
-                        </div>
-
-                        <!-- NỘI DUNG 4 MÀN GAME -->
-                        <div class="p-5 flex-1 flex flex-col justify-between">
-                            
-                            <!-- MÀN 0: BẮT ĐẦU -->
-                            <div class="game-screen active" id="gameScreen0">
-                                <div class="text-center space-y-1 mb-3">
-                                    <h3 class="font-serif text-xl font-bold text-burgundy-800">Vào Xưởng Thử Việc!</h3>
-                                    <p class="text-xs text-neutral-500">Khám phá cách thợ Thu Hương hoàn thiện một bộ rèm tỉ mỉ.</p>
-                                </div>
-
-                                <div class="mini-window-stage flex items-center justify-center mb-3">
-                                    <div class="text-center">
-                                        <span class="text-5xl block animate-pulse">🪟</span>
-                                        <p class="text-[11px] font-semibold text-neutral-500 mt-2">Cửa sổ đang thô sơ chờ lắp đặt</p>
-                                    </div>
-                                    <div class="window-cross-mullions"></div>
-                                </div>
-
-                                <div class="bg-amber-50/70 border-l-4 border-gold-500 p-3 rounded-r-lg text-xs text-neutral-700 leading-relaxed mb-4">
-                                    💡 <strong>Nguyên tắc nghề:</strong> Một bộ rèm đẳng cấp phụ thuộc 70% vào sự chính xác cơ khí và chọn đúng chất liệu cho gia chủ.
-                                </div>
-
-                                <button onclick="nextGameLevel(1)" class="w-full py-3.5 bg-burgundy-600 hover:bg-burgundy-700 text-white rounded-xl font-bold text-sm shadow-md transition transform active:scale-95 flex items-center justify-center gap-2">
-                                    <span>Bắt Đầu Thử Thách Ngay</span>
-                                    <i class="fa-solid fa-arrow-right text-xs"></i>
-                                </button>
-                            </div>
-
-                            <!-- MÀN 1: KÉO THƯỚC -->
-                            <div class="game-screen" id="gameScreen1">
-                                <div class="text-center space-y-1 mb-2">
-                                    <h3 class="font-serif text-lg font-bold text-burgundy-800">Màn 1: Cắt Thước Milimet</h3>
-                                    <p class="text-xs text-neutral-500">Giữ nút thước cuộn và thả tay đúng <strong>VÙNG XANH CHUẨN</strong> mép cửa!</p>
-                                </div>
-
-                                <div class="mini-window-stage flex items-center justify-center mb-3">
-                                    <div class="text-center">
-                                        <div id="measureDisplayVal" class="text-2xl font-bold font-mono text-burgundy-700">0 cm</div>
-                                        <div class="text-[10px] text-neutral-400">Chiều ngang lọt lòng khung cửa sổ</div>
-                                    </div>
-                                    <div class="window-cross-mullions"></div>
-                                </div>
-
-                                <div class="tape-track-box mb-2">
-                                    <div id="tapeFillBar" class="tape-fill-bar"></div>
-                                    <div class="tape-target-zone">VẠCH CHUẨN</div>
-                                </div>
-
-                                <div id="lvl1FeedBack" class="bg-cream-200/50 border-l-4 border-burgundy-600 p-2.5 rounded-r-lg text-[11px] text-neutral-700 mb-3">
-                                    ⚠️ Thừa 1cm rèm quét sàn mất phom. Hụt 1cm ánh sáng lọt qua khe!
-                                </div>
-
-                                <button id="tapeBtn" onmousedown="startTapeMeasure()" onmouseup="stopTapeMeasure()" ontouchstart="startTapeMeasure(event)" ontouchend="stopTapeMeasure(event)" class="w-full py-3.5 bg-burgundy-600 hover:bg-burgundy-700 text-white rounded-xl font-bold text-sm shadow-md transition active:scale-95">
-                                    📐 Nhấn & Giữ Để Kéo Thước
-                                </button>
-                            </div>
-
-                            <!-- MÀN 2: CHỌN ĐỒ NGHỀ -->
-                            <div class="game-screen" id="gameScreen2">
-                                <div class="text-center space-y-1 mb-3">
-                                    <h3 class="font-serif text-lg font-bold text-burgundy-800">Màn 2: Gia Cố Hộp Thạch Cao</h3>
-                                    <p class="text-xs text-neutral-500">Trần thạch cao âm rất xốp. Bạn dùng phụ kiện nào để treo rèm 15kg không lo tụt sập?</p>
-                                </div>
-
-                                <div class="space-y-2 mb-3">
-                                    <div onclick="pickToolOption(1, this)" class="tool-option-card bg-white p-3 rounded-xl border border-cream-200 flex items-center space-x-3 cursor-pointer hover:border-burgundy-600 transition">
-                                        <span class="text-2xl">🔩</span>
-                                        <div>
-                                            <p class="text-xs font-bold text-neutral-800">Vít nở nhựa thông dụng</p>
-                                            <p class="text-[10px] text-neutral-500">Loại đóng tường bê tông thông thường</p>
-                                        </div>
-                                    </div>
-                                    <div onclick="pickToolOption(2, this)" class="tool-option-card bg-white p-3 rounded-xl border border-cream-200 flex items-center space-x-3 cursor-pointer hover:border-burgundy-600 transition">
-                                        <span class="text-2xl">🔨</span>
-                                        <div>
-                                            <p class="text-xs font-bold text-neutral-800">Đóng đinh bê tông dài</p>
-                                            <p class="text-[10px] text-neutral-500">Đóng xuyên trực tiếp lên trần</p>
-                                        </div>
-                                    </div>
-                                    <div onclick="pickToolOption(3, this)" class="tool-option-card bg-white p-3 rounded-xl border border-cream-200 flex items-center space-x-3 cursor-pointer hover:border-burgundy-600 transition">
-                                        <span class="text-2xl">🛡️</span>
-                                        <div>
-                                            <p class="text-xs font-bold text-neutral-800">Nở bướm xòe cánh + Tắc kê sắt</p>
-                                            <p class="text-[10px] text-neutral-500">Ôm chặt xương trần thạch cao, chịu tải gấp 3 lần</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="lvl2FeedBack" class="bg-cream-200/50 border-l-4 border-burgundy-600 p-2.5 rounded-r-lg text-[11px] text-neutral-700 mb-3">
-                                    💡 Rèm vải cao cấp rất nặng. Chọn sai ốc vít có thể kéo sập toàn bộ hộp rèm của khách!
-                                </div>
-
-                                <button id="lvl2NextBtn" disabled onclick="nextGameLevel(3)" class="w-full py-3.5 bg-burgundy-600 disabled:bg-neutral-300 text-white rounded-xl font-bold text-sm shadow-md transition disabled:cursor-not-allowed">
-                                    Bắn Vít Cố Định Thanh Ray ➔
-                                </button>
-                            </div>
-
-                            <!-- MÀN 3: PHỐI RÈM 5 KHÔNG GIAN RANDOM -->
-                            <div class="game-screen" id="gameScreen3">
-                                <div class="text-center space-y-1 mb-2">
-                                    <span id="roomTitleBadge" class="inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-burgundy-100 text-burgundy-800 border border-burgundy-600/20">📍 Phòng Ngủ Hướng Tây</span>
-                                    <h3 class="font-serif text-lg font-bold text-burgundy-800">Phối Rèm Đúng Công Năng</h3>
-                                    <p id="roomRequirementText" class="text-xs text-neutral-600 line-clamp-2">Nắng gắt 40°C chiếu trực diện, cần tối hoàn toàn để ngủ say.</p>
-                                </div>
-
-                                <!-- Cửa sổ thử rèm Live -->
-                                <div class="mini-window-stage mb-2 relative" id="gameWindowStage">
-                                    <div id="roomStageBackground" class="absolute inset-0 flex flex-col items-center justify-center transition-all duration-300">
-                                        <span id="outsideWeatherIcon" class="text-4xl">☀️</span>
-                                        <span id="outsideWeatherLabel" class="text-[10px] font-bold text-neutral-700 mt-1">Nắng gắt chiều</span>
-                                    </div>
-                                    <div class="window-cross-mullions"></div>
-                                    <div id="liveCurtainFit" class="curtain-live-fitting"></div>
-                                </div>
-
-                                <!-- Danh sách Swatch mẫu rèm -->
-                                <div class="mb-2">
-                                    <div class="flex justify-between items-center text-[10px] uppercase font-bold text-neutral-500 mb-1.5">
-                                        <span>Mẫu Vải Tại Tiệm</span>
-                                        <span class="text-burgundy-600">Chạm để ướm thử ⬇</span>
-                                    </div>
-                                    <div class="grid grid-cols-3 gap-2" id="swatchContainer">
-                                        <!-- Render dynamic -->
-                                    </div>
-                                </div>
-
-                                <div id="lvl3GuideText" class="bg-cream-200/50 border-l-4 border-gold-500 p-2 rounded-r-lg text-[10.5px] text-neutral-700 mb-2">
-                                    👉 Chạm vào từng mẫu vải trên để ướm thử rèm lên cửa, sau đó ấn chốt lựa chọn!
-                                </div>
-
-                                <button id="confirmChoiceBtn" disabled onclick="validateCurtainMatch()" class="w-full py-3 bg-burgundy-600 disabled:bg-neutral-300 text-white rounded-xl font-bold text-xs shadow-md transition disabled:cursor-not-allowed">
-                                    Chốt Phương Án Này Cho Cửa Sổ ➔
-                                </button>
-                            </div>
-
-                            <!-- MÀN 4: VINH DANH & FORM CHỐT VOUCHER -->
-                            <div class="game-screen" id="gameScreen4">
-                                <div class="text-center space-y-1 mb-2">
-                                    <span class="text-4xl block">🎖️</span>
-                                    <h3 class="font-serif text-xl font-bold text-burgundy-800">Tuyệt Đỉnh Tay Nghề!</h3>
-                                    <p class="text-xs text-neutral-600 font-medium">Bạn đã được cấp chứng nhận <strong class="text-burgundy-700">"Thợ Rèm Xuất Sắc"</strong></p>
-                                </div>
-
-                                <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 rounded-xl p-3 my-2 space-y-1 text-xs">
-                                    <p class="font-bold text-burgundy-800 text-[11px] uppercase tracking-wider">Đặc quyền dành riêng cho bạn:</p>
-                                    <p class="text-[11px] text-neutral-700"><i class="fa-solid fa-ticket text-gold-500 mr-1.5"></i> <strong>Voucher giảm 10%</strong> tổng đơn đặt rèm</p>
-                                    <p class="text-[11px] text-neutral-700"><i class="fa-solid fa-truck-fast text-gold-500 mr-1.5"></i> <strong>Miễn phí 100%</strong> đo đạc mang mẫu đến tận nhà</p>
-                                    <p class="text-[11px] text-neutral-700"><i class="fa-solid fa-shield-halved text-gold-500 mr-1.5"></i> <strong>Tặng gói giặt bảo dưỡng rèm</strong> sau 1 năm</p>
-                                </div>
-
-                                <form onsubmit="handleGameVoucherSubmit(event)" class="space-y-2 mt-1">
-                                    <input type="text" id="gameCustName" required placeholder="Họ và tên của bạn *" class="w-full px-3 py-2 text-xs rounded-lg border border-neutral-300 focus:ring-1 focus:ring-burgundy-600 outline-none">
-                                    <input type="tel" id="gameCustPhone" required placeholder="Số điện thoại nhận mã Zalo *" class="w-full px-3 py-2 text-xs rounded-lg border border-neutral-300 focus:ring-1 focus:ring-burgundy-600 outline-none">
-                                    <input type="text" id="gameCustAddr" placeholder="Địa chỉ / Khu vực cần tư vấn đo rèm" class="w-full px-3 py-2 text-xs rounded-lg border border-neutral-300 focus:ring-1 focus:ring-burgundy-600 outline-none">
-                                    <button type="submit" class="w-full py-3 bg-burgundy-600 hover:bg-burgundy-700 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center justify-center gap-2">
-                                        <i class="fa-solid fa-gift text-gold-500"></i>
-                                        <span>Nhận Mã Giảm 10% & Gặp Anh Tân</span>
-                                    </button>
-                                </form>
-                            </div>
-
-                            <!-- MÀN 5: HOÀN TẤT -->
-                            <div class="game-screen" id="gameScreen5">
-                                <div class="text-center py-6 space-y-3">
-                                    <span class="text-6xl text-green-600 block animate-bounce">🎉</span>
-                                    <h3 class="font-serif text-2xl font-bold text-burgundy-800">Chúc Mừng Bạn!</h3>
-                                    <p class="text-xs text-neutral-600 leading-relaxed max-w-xs mx-auto">
-                                        Mã giảm giá <strong>THUHUONG-VIP10</strong> đã sẵn sàng. Hãy bấm nút dưới đây để kết nối trực tiếp với <strong>anh Thái Quốc Tân (0383.818.553)</strong> và xếp lịch đo tận nhà!
-                                    </p>
-                                    <div class="pt-2 space-y-2">
-                                        <a id="gameZaloDirectBtn" href="#" target="_blank" class="block w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-xs shadow-md transition">
-                                            <i class="fa-solid fa-comment-dots mr-1.5"></i> Nhắn Zalo Anh Tân Nhận Voucher
-                                        </a>
-                                        <button onclick="nextGameLevel(0)" class="text-xs text-burgundy-700 underline font-semibold">
-                                            Chơi lại trải nghiệm
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- MODAL KHI CHỌN SAI RÈM (CHUYỂN PHÒNG KHÁC) -->
-                        <div id="gameFailModal" class="absolute inset-0 bg-neutral-900/80 backdrop-blur-sm z-50 hidden flex-col items-center justify-center p-6 text-center">
-                            <div class="bg-white rounded-2xl p-5 border-2 border-burgundy-600 shadow-2xl max-w-xs space-y-3 transform scale-95 transition-all">
-                                <span class="text-4xl block">🤔</span>
-                                <h4 class="font-serif font-bold text-base text-burgundy-800">Chưa Đạt Tiêu Chuẩn Rồi!</h4>
-                                <p id="gameFailReasonText" class="text-xs text-neutral-600 leading-relaxed">
-                                    Lý do kỹ thuật giải thích tại sao rèm này chưa đúng...
-                                </p>
-                                <button onclick="retryGameWithNewRoom()" class="w-full py-2.5 bg-burgundy-600 hover:bg-burgundy-700 text-white rounded-xl font-bold text-xs shadow transition">
-                                    🔄 Thử Lại Với Căn Phòng Khác
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- AI Room Visualizer & 3D Section -->
+    <!-- AI Room Visualizer & Interactive 3D Model Section -->
     <section id="phong-ao-ai" class="py-20 bg-white border-y border-neutral-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                <span class="text-burgundy-600 font-semibold tracking-wider uppercase text-sm">Công nghệ thông minh</span>
+            <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
+                <span class="text-burgundy-600 font-semibold tracking-wider uppercase text-xs">Công nghệ mô phỏng thông minh</span>
                 <h2 class="font-serif text-3xl sm:text-4xl font-bold text-neutral-900">Phòng Ảo AI Thay Rèm & Mô Hình 3D</h2>
-                <p class="text-neutral-600">Trải nghiệm phối cảnh trực quan: Tải ảnh phòng lên hoặc chọn mẫu có sẵn, tùy chỉnh màu sắc tùy thích bằng bảng màu hoặc tự kéo mã màu để xem rèm lắp trực tiếp.</p>
+                <p class="text-neutral-600 text-sm">
+                    Tải ảnh phòng thực tế của bạn hoặc chọn phòng mẫu có sẵn. Tùy chọn phối cảnh AI 2D linh hoạt hoặc xoay mô hình 3D đa chiều!
+                </p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Control Panel -->
-                <div class="bg-cream-50 p-6 rounded-2xl border border-neutral-200 space-y-6 shadow-sm">
-                    <h3 class="font-serif text-xl font-bold text-burgundy-800 border-b border-neutral-200 pb-3">
-                        <i class="fa-solid fa-sliders mr-2"></i> Tùy Chỉnh Không Gian
+                <div class="bg-cream-50 p-6 rounded-2xl border border-neutral-200 space-y-5 shadow-sm">
+                    <h3 class="font-serif text-xl font-bold text-burgundy-800 border-b border-neutral-200 pb-3 flex items-center">
+                        <i class="fa-solid fa-sliders mr-2 text-burgundy-600"></i> Bảng Điều Khiển
                     </h3>
 
+                    <!-- 1. Tải ảnh hoặc chọn mẫu -->
                     <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-neutral-700">1. Chọn Hoặc Tải Ảnh Phòng Của Bạn</label>
-                        <div class="border-2 border-dashed border-burgundy-600/30 rounded-xl p-4 text-center bg-white hover:bg-burgundy-600/5 transition cursor-pointer relative">
+                        <label class="block text-xs font-bold text-neutral-800 uppercase tracking-wide">1. Chọn Hoặc Tải Ảnh Phòng Của Bạn</label>
+                        <div class="border-2 border-dashed border-burgundy-600/30 rounded-xl p-3 text-center bg-white hover:bg-burgundy-600/5 transition cursor-pointer relative">
                             <input type="file" id="roomUpload" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleImageUpload(event)">
                             <i class="fa-solid fa-cloud-arrow-up text-burgundy-600 text-2xl mb-1"></i>
-                            <p class="text-xs font-medium text-neutral-700">Bấm để tải ảnh phòng thực tế</p>
-                            <p class="text-[10px] text-neutral-400">Hỗ trợ JPG, PNG</p>
+                            <p class="text-xs font-semibold text-neutral-700">Tải ảnh phòng nhà bạn lên đây</p>
+                            <p class="text-[10px] text-neutral-400">Tự động áp dụng cả chế độ AI 2D và 3D</p>
                         </div>
-                        <div class="grid grid-cols-3 gap-2 pt-2">
-                            <button onclick="setPresetRoom('https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=600&q=80')" class="text-xs border rounded-lg p-1.5 hover:border-burgundy-600 truncate bg-white">Phòng Khách</button>
-                            <button onclick="setPresetRoom('https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=600&q=80')" class="text-xs border rounded-lg p-1.5 hover:border-burgundy-600 truncate bg-white">Phòng Ngủ</button>
-                            <button onclick="setPresetRoom('https://images.unsplash.com/photo-1540518614846-7ede433c4ef0?auto=format&fit=crop&w=600&q=80')" class="text-xs border rounded-lg p-1.5 hover:border-burgundy-600 truncate bg-white">Biệt Thự</button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <label class="block text-sm font-semibold text-neutral-700">2. Chọn Màu Sắc & Tùy Chỉnh Theo Ý Thích</label>
-                        <div class="grid grid-cols-5 gap-2">
-                            <button onclick="updateCurtainStyle('#7A1C2E', 'Đỏ Burgundy Hoàng Gia')" class="w-full h-10 rounded-lg bg-[#7A1C2E] border-2 border-white shadow ring-1 ring-neutral-300 hover:scale-105 transition" title="Đỏ Burgundy"></button>
-                            <button onclick="updateCurtainStyle('#F5F0EB', 'Be Kem Nhã Nhặn')" class="w-full h-10 rounded-lg bg-[#F5F0EB] border-2 border-white shadow ring-1 ring-neutral-300 hover:scale-105 transition" title="Be Kem"></button>
-                            <button onclick="updateCurtainStyle('#1A1A1A', 'Đen Huyền Bí')" class="w-full h-10 rounded-lg bg-[#1A1A1A] border-2 border-white shadow ring-1 ring-neutral-300 hover:scale-105 transition" title="Đen Huyền Bí"></button>
-                            <button onclick="updateCurtainStyle('#D4AF37', 'Vàng Cổ Điển')" class="w-full h-10 rounded-lg bg-[#D4AF37] border-2 border-white shadow ring-1 ring-neutral-300 hover:scale-105 transition" title="Vàng Cổ Điển"></button>
-                            <button onclick="updateCurtainStyle('#708090', 'Xám Khói Hiện Đại')" class="w-full h-10 rounded-lg bg-[#708090] border-2 border-white shadow ring-1 ring-neutral-300 hover:scale-105 transition" title="Xám Khói"></button>
-                        </div>
-                        <div class="flex items-center space-x-3 pt-2 bg-white p-3 rounded-xl border border-neutral-200">
-                            <div class="flex-1">
-                                <label class="block text-[11px] font-medium text-neutral-500">Tự kéo chọn màu rèm hoặc nhập mã HEX:</label>
-                                <input type="text" id="hexInput" value="#7A1C2E" oninput="updateCustomHex(this.value)" class="text-xs font-mono font-bold uppercase mt-1 w-full px-2 py-1 border rounded bg-neutral-50">
-                            </div>
-                            <input type="color" id="colorPicker" value="#7A1C2E" onchange="updateColorPicker(this.value)" class="w-10 h-10 rounded-lg cursor-pointer border-0 p-0 bg-transparent">
+                        <div class="grid grid-cols-3 gap-1.5 pt-1">
+                            <button onclick="setPresetRoom('https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80')" class="text-[11px] border rounded-lg py-1.5 px-1 hover:border-burgundy-600 truncate bg-white font-medium">Phòng Khách</button>
+                            <button onclick="setPresetRoom('https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80')" class="text-[11px] border rounded-lg py-1.5 px-1 hover:border-burgundy-600 truncate bg-white font-medium">Phòng Ngủ</button>
+                            <button onclick="setPresetRoom('https://images.unsplash.com/photo-1540518614846-7ede433c4ef0?auto=format&fit=crop&w=800&q=80')" class="text-[11px] border rounded-lg py-1.5 px-1 hover:border-burgundy-600 truncate bg-white font-medium">Biệt Thự</button>
                         </div>
                     </div>
 
-                    <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-neutral-700">3. Chế Độ Hiển Thị</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="setViewMode('2d')" id="btn2d" class="py-2.5 px-4 text-xs font-semibold rounded-xl bg-burgundy-600 text-white shadow transition">Phối Cảnh AI (2D)</button>
-                            <button onclick="setViewMode('3d')" id="btn3d" class="py-2.5 px-4 text-xs font-semibold rounded-xl bg-white text-neutral-700 border border-neutral-300 shadow-sm transition">Mô Hình 3D Xoay</button>
-                        </div>
-                    </div>
-
-                    <div class="bg-burgundy-600/10 border border-burgundy-600/20 p-4 rounded-xl space-y-1">
-                        <p class="text-xs font-bold text-burgundy-800 flex items-center">
-                            <i class="fa-solid fa-robot mr-1.5 text-burgundy-600"></i> AI Tư Vấn Chuyên Gia:
-                        </p>
-                        <p id="aiAdviceText" class="text-xs text-neutral-700 leading-relaxed">
-                            Đang chọn màu sắc tùy chỉnh: Phù hợp tuyệt đối để làm nổi bật khung cửa, mang lại vẻ đẹp sang trọng và đẳng cấp cho không gian.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Display Canvas -->
-                <div class="lg:col-span-2 bg-neutral-900 rounded-2xl overflow-hidden shadow-2xl relative flex items-center justify-center min-h-[450px]">
-                    <div id="view2dContainer" class="relative w-full h-full flex items-center justify-center">
-                        <img id="roomImageDisplay" src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1200&q=80" alt="Phòng mẫu" class="w-full h-[500px] object-cover">
-                        <div id="curtainOverlay" class="absolute top-10 right-12 w-48 h-96 opacity-90 transition-all duration-300 shadow-2xl flex flex-col justify-between border-y-4 border-amber-500" style="background: linear-gradient(to right, rgba(122,28,46,0.8), #7A1C2E, rgba(122,28,46,0.8));">
-                            <div class="w-full h-3 bg-amber-600 shadow-md"></div>
-                            <div class="flex justify-around w-full opacity-40">
-                                <div class="w-px h-full bg-black"></div>
-                                <div class="w-px h-full bg-black"></div>
-                                <div class="w-px h-full bg-black"></div>
-                                <div class="w-px h-full bg-black"></div>
-                            </div>
-                            <div class="w-full h-3 bg-amber-600 shadow-md"></div>
-                        </div>
-                        <div class="absolute bottom-4 left-4 bg-black/70 backdrop-blur-md text-white px-4 py-2 rounded-xl text-xs flex items-center space-x-2">
-                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                            <span>AI đã tự động lắp rèm & thay mới không gian theo mã màu bạn chọn</span>
-                        </div>
-                    </div>
-
-                    <div id="view3dContainer" class="hidden relative w-full h-[500px] flex flex-col items-center justify-center bg-gradient-to-b from-neutral-800 to-neutral-950 text-white p-6 text-center">
-                        <div class="w-32 h-32 rounded-full border-4 border-burgundy-600 border-dashed animate-spin flex items-center justify-center mb-4">
-                            <i class="fa-solid fa-cube text-4xl text-burgundy-500"></i>
-                        </div>
-                        <h4 class="font-serif text-xl font-bold mb-2">Trình Xem Mô Hình 3D 360°</h4>
-                        <p class="text-xs text-neutral-400 max-w-md mb-6">Bạn đang quan sát mẫu rèm cao cấp với màu sắc tùy chỉnh trong không gian 3D tương tác.</p>
-                        <div class="flex space-x-3">
-                            <button onclick="alert('Đã xoay góc trái 90 độ')" class="bg-neutral-800 hover:bg-neutral-700 px-4 py-2 rounded-lg text-xs border border-neutral-700"><i class="fa-solid fa-arrow-left mr-1"></i> Xoay Trái</button>
-                            <button onclick="alert('Đã xoay góc phải 90 độ')" class="bg-neutral-800 hover:bg-neutral-700 px-4 py-2 rounded-lg text-xs border border-neutral-700">Xoay Phải <i class="fa-solid fa-arrow-right ml-1"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Collections Section -->
-    <section id="bo-suu-tap" class="py-20 bg-cream-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                <span class="text-burgundy-600 font-semibold tracking-wider uppercase text-sm">Sản phẩm chủ lực</span>
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-neutral-900">Bộ Sưu Tập Rèm Cửa Cao Cấp</h2>
-                <p class="text-neutral-600">Đa dạng mẫu mã từ hiện đại đến cổ điển dưới bàn tay may đo chuẩn xác của anh Thái Quốc Tân tại 129 Điện Biên Phủ, Nam Phước.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Card 1: Rèm Vải 2 Lớp -->
-                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-neutral-200 group">
-                    <div class="relative overflow-hidden h-64 bg-neutral-200">
-                        <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" alt="Rem vai 2 lop cao cap" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-3 left-3 bg-burgundy-600 text-white text-[10px] px-2.5 py-1 rounded-full uppercase font-semibold">Bán chạy nhất</span>
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <h3 class="font-serif text-lg font-bold text-neutral-900">Rèm Vải 2 Lớp Cao Cấp</h3>
-                        <p class="text-xs text-neutral-600 leading-relaxed">Sự kết hợp hoàn hảo giữa lớp vải gấm dệt 3 lớp cản nắng 100% và lớp voan trắng tinh khôi thêu tay tinh tế.</p>
-                        <div class="pt-2 flex items-center justify-between">
-                            <span class="text-burgundy-800 font-bold text-sm">Chỉ từ 650k/mét ngang</span>
-                            <a href="#lien-he" class="text-xs font-semibold text-burgundy-600 hover:underline">Tư vấn ngay &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 2: Rèm Cầu Vồng Hàn Quốc (ĐÃ THAY HÌNH ẢNH RÈM CHUẨN XÁC) -->
-                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-neutral-200 group">
-                    <div class="relative overflow-hidden h-64 bg-neutral-200">
-                        <img src="https://images.unsplash.com/photo-1609423433459-a65b330ef5da?auto=format&fit=crop&w=600&q=80" alt="Rem cau vong Han Quoc" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-3 left-3 bg-amber-600 text-white text-[10px] px-2.5 py-1 rounded-full uppercase font-semibold">Hiện đại</span>
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <h3 class="font-serif text-lg font-bold text-neutral-900">Rèm Cầu Vồng Hàn Quốc</h3>
-                        <p class="text-xs text-neutral-600 leading-relaxed">Vải dệt 2 lớp đan xen lấy sáng linh hoạt, nhập khẩu Modero Hàn Quốc, lắp lọt lòng cửa sổ cực kỳ gọn gàng.</p>
-                        <div class="pt-2 flex items-center justify-between">
-                            <span class="text-burgundy-800 font-bold text-sm">Chỉ từ 480k/m²</span>
-                            <a href="#lien-he" class="text-xs font-semibold text-burgundy-600 hover:underline">Tư vấn ngay &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 3: Rèm Sáo Gỗ Tự Nhiên -->
-                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-neutral-200 group">
-                    <div class="relative overflow-hidden h-64 bg-neutral-200">
-                        <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=600&q=80" alt="Rem sao go tu nhien" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <h3 class="font-serif text-lg font-bold text-neutral-900">Rèm Sáo Gỗ Tự Nhiên</h3>
-                        <p class="text-xs text-neutral-600 leading-relaxed">Chất liệu gỗ sồi tự nhiên 100%, sơn phủ UV chống mối mọt và cong vênh, mang lại vẻ đẹp hoài niệm, ấm cúng.</p>
-                        <div class="pt-2 flex items-center justify-between">
-                            <span class="text-burgundy-800 font-bold text-sm">Chỉ từ 720k/m²</span>
-                            <a href="#lien-he" class="text-xs font-semibold text-burgundy-600 hover:underline">Tư vấn ngay &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4: Rèm Cuốn Chống Nắng Văn Phòng -->
-                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-neutral-200 group">
-                    <div class="relative overflow-hidden h-64 bg-neutral-200">
-                        <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=600&q=80" alt="Rem cuon chong nang" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                    </div>
-                    <div class="p-5 space-y-3">
-                        <h3 class="font-serif text-lg font-bold text-neutral-900">Rèm Cuốn Chống Nắng</h3>
-                        <p class="text-xs text-neutral-600 leading-relaxed">Giải pháp cản nhiệt tối ưu cho cửa kính lớn, quán cà phê, văn phòng với độ bền trên 7 năm và chống bám bụi bẩn.</p>
-                        <div class="pt-2 flex items-center justify-between">
-                            <span class="text-burgundy-800 font-bold text-sm">Chỉ từ 280k/m²</span>
-                            <a href="#lien-he" class="text-xs font-semibold text-burgundy-600 hover:underline">Tư vấn ngay &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Price Calculator Section -->
-    <section id="tinh-gia" class="py-20 bg-white border-t border-neutral-200">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-cream-50 p-8 sm:p-12 rounded-3xl border border-burgundy-600/20 shadow-lg space-y-8">
-                <div class="text-center space-y-2">
-                    <span class="text-burgundy-600 font-semibold uppercase text-xs tracking-wider">Tiện ích thông minh</span>
-                    <h2 class="font-serif text-3xl font-bold text-neutral-900">Tính Chi Phí Rèm Cửa Tự Động</h2>
-                    <p class="text-xs text-neutral-600">Nhập kích thước khung cửa dự kiến để ước tính chi phí sơ bộ trước khi anh Thái Quốc Tân qua đo đạc thực tế.</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div>
-                        <label class="block text-xs font-semibold text-neutral-700 mb-2">Loại Rèm</label>
-                        <select id="calcType" class="w-full px-4 py-3 rounded-xl border border-neutral-300 bg-white text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
-                            <option value="650000">Rèm Vải 2 Lớp (650k/mét ngang)</option>
-                            <option value="480000">Rèm Cầu Vồng (480k/m²)</option>
-                            <option value="720000">Rèm Sáo Gỗ (720k/m²)</option>
-                            <option value="280000">Rèm Cuốn (280k/m²)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-neutral-700 mb-2">Chiều Ngang (mét)</label>
-                        <input type="number" id="calcWidth" value="3" step="0.1" class="w-full px-4 py-3 rounded-xl border border-neutral-300 bg-white text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-neutral-700 mb-2">Chiều Cao (mét)</label>
-                        <input type="number" id="calcHeight" value="2.8" step="0.1" class="w-full px-4 py-3 rounded-xl border border-neutral-300 bg-white text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row items-center justify-between bg-white p-6 rounded-2xl border border-burgundy-600/20 shadow-sm">
-                    <div>
-                        <p class="text-xs text-neutral-500 uppercase tracking-wider">Ước tính chi phí tạm tính:</p>
-                        <p id="calcResult" class="font-serif text-3xl font-bold text-burgundy-800">1,950,000 VNĐ</p>
-                    </div>
-                    <button onclick="calculatePrice()" class="mt-4 sm:mt-0 bg-burgundy-600 hover:bg-burgundy-700 text-white px-6 py-3 rounded-xl font-medium text-sm shadow-md transition">
-                        Tính Lại Chi Phí
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact & Zalo Integration Form Section -->
-    <section id="lien-he" class="py-20 bg-gradient-to-b from-cream-100 to-cream-50">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white p-8 sm:p-12 rounded-3xl shadow-xl border border-burgundy-600/20">
-                <div class="text-center space-y-3 mb-10">
-                    <span class="text-burgundy-600 font-semibold uppercase text-xs tracking-wider">Kết nối nhanh chóng</span>
-                    <h2 class="font-serif text-3xl font-bold text-neutral-900">Đăng Ký Tư Vấn & Khảo Sát Tận Nơi</h2>
-                    <p class="text-xs text-neutral-600">Điền thông tin bên dưới để hệ thống chuyển hướng ngay sang **Zalo trực tiếp của anh Thái Quốc Tân (SĐT: 0383.818.553)** cùng toàn bộ nội dung yêu cầu!</p>
-                </div>
-
-                <form onsubmit="submitToZalo(event)" class="space-y-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-xs font-semibold text-neutral-700 mb-2">Họ và Tên của bạn *</label>
-                            <input type="text" id="cusName" required placeholder="Ví dụ: Chị Lan" class="w-full px-4 py-3 rounded-xl border border-neutral-300 text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-neutral-700 mb-2">Số Điện Thoại Zalo *</label>
-                            <input type="tel" id="cusPhone" required placeholder="Ví dụ: 0905xxxxxx" class="w-full px-4 py-3 rounded-xl border border-neutral-300 text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-neutral-700 mb-2">Địa Chỉ Nhà / Công Trình *</label>
-                        <input type="text" id="cusAddress" required placeholder="Ví dụ: 129 Điện Biên Phủ, Nam Phước, Quảng Nam" class="w-full px-4 py-3 rounded-xl border border-neutral-300 text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-neutral-700 mb-2">Yêu Cầu / Mẫu Rèm & Màu Sắc Quan Tâm</label>
-                        <textarea id="cusNote" rows="3" placeholder="Ví dụ: Tôi muốn tư vấn rèm vải 2 lớp cho phòng khách và rèm cầu vồng phòng ngủ..." class="w-full px-4 py-3 rounded-xl border border-neutral-300 text-sm focus:ring-2 focus:ring-burgundy-600 outline-none"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-burgundy-600 hover:bg-burgundy-700 text-white font-medium py-4 rounded-xl shadow-lg shadow-burgundy-600/30 transition flex items-center justify-center space-x-2 text-base">
-                        <i class="fa-solid fa-pape
+                    <!-- 2. Chọn màu sắc rèm -->
+                    <div class="space-y-2.5">
+                        <label class="block text-xs font-bold text-neutral-800 uppercase t
