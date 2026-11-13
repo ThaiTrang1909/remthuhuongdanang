@@ -261,4 +261,947 @@
 
                     <!-- 2. Chọn màu sắc rèm -->
                     <div class="space-y-2.5">
-                        <label class="block text-xs font-bold text-neutral-800 uppercase t
+                        <label class="block text-xs font-bold text-neutral-800 uppercase tracking-wide">2. Chọn Chất Liệu & Màu Rèm</label>
+                        <div class="grid grid-cols-5 gap-2">
+                            <button onclick="updateCurtainStyle('#7A1C2E', 'Đỏ Burgundy Hoàng Gia')" class="w-full h-9 rounded-lg bg-[#7A1C2E] border-2 border-white shadow ring-1 ring-neutral-300 hover:scale-105 transition" title="Đỏ Burgundy"></button>
+                            <button onclick="updateCurtainStyle('#F5F0EB', 'Be Kem Nhã Nhặn')" class="w-full h-9 rounded-lg bg-[#F5F0EB] border-2 border-white shadow ring-1 ring-neutral-300 hover:scale-105 transition" title="Be Kem"></button>
+                            <button onclick="updateCurtainStyle('#242424', 'Đen Huyền Bí')" class="w-full h-9 rounded-lg bg-[#242424] border-2 border-white shadow ring-1 ring-neutral-300 hover:scale-105 transition" title="Đen"></button>
+                            <button onclick="updateCurtainStyle('#C59B27', 'Vàng Hoàng Gia')" class="w-full h-9 rounded-lg bg-[#C59B27] border-2 border-white shadow ring-1 ring-neutral-300 hover:scale-105 transition" title="Vàng Gold"></button>
+                            <button onclick="updateCurtainStyle('#607D8B', 'Xanh Xám Thanh Lịch')" class="w-full h-9 rounded-lg bg-[#607D8B] border-2 border-white shadow ring-1 ring-neutral-300 hover:scale-105 transition" title="Xám Xanh"></button>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-white p-2.5 rounded-xl border border-neutral-200">
+                            <div class="flex-1">
+                                <label class="block text-[10px] font-medium text-neutral-500">Mã màu HEX tuỳ chọn:</label>
+                                <input type="text" id="hexInput" value="#7A1C2E" oninput="updateCustomHex(this.value)" class="text-xs font-mono font-bold uppercase mt-0.5 w-full px-2 py-1 border rounded bg-neutral-50">
+                            </div>
+                            <input type="color" id="colorPicker" value="#7A1C2E" onchange="updateColorPicker(this.value)" class="w-9 h-9 rounded-lg cursor-pointer border-0 p-0 bg-transparent">
+                        </div>
+                    </div>
+
+                    <!-- 3. Chế độ hiển thị -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-neutral-800 uppercase tracking-wide">3. Chế Độ Hiển Thị</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setViewMode('2d')" id="btn2d" class="py-2 px-3 text-xs font-bold rounded-xl bg-burgundy-600 text-white shadow transition">
+                                <i class="fa-regular fa-image mr-1"></i> Phối Cảnh AI (2D)
+                            </button>
+                            <button onclick="setViewMode('3d')" id="btn3d" class="py-2 px-3 text-xs font-bold rounded-xl bg-white text-neutral-700 border border-neutral-300 shadow-sm transition">
+                                <i class="fa-solid fa-cube mr-1"></i> Mô Hình 3D Xoay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lời khuyên AI -->
+                    <div class="bg-burgundy-600/10 border border-burgundy-600/20 p-3.5 rounded-xl space-y-1">
+                        <p class="text-xs font-bold text-burgundy-800 flex items-center">
+                            <i class="fa-solid fa-robot mr-1.5 text-burgundy-600"></i> AI Tiệm Rèm Thu Hương:
+                        </p>
+                        <p id="aiAdviceText" class="text-xs text-neutral-700 leading-relaxed">
+                            Màu sắc đang chọn mang sắc thái hài hòa, tôn trần nhà và cản sáng dịu mắt cho không gian sống của bạn.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Display Canvas -->
+                <div class="lg:col-span-2 bg-neutral-900 rounded-2xl overflow-hidden shadow-2xl relative flex items-center justify-center min-h-[460px]">
+                    
+                    <!-- 2D Canvas Container -->
+                    <div id="view2dContainer" class="relative w-full h-[480px] flex items-center justify-center overflow-hidden">
+                        <img id="roomImageDisplay" src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1200&q=80" alt="Phòng mẫu" class="w-full h-full object-cover">
+                        
+                        <!-- Rèm Overlay tương tác kéo thả -->
+                        <div id="curtainOverlay" 
+                             class="absolute top-10 right-16 w-52 h-96 opacity-95 transition-colors duration-300 shadow-2xl flex flex-col justify-between border-y-4 border-gold-500 cursor-move" 
+                             style="background: linear-gradient(to right, rgba(122,28,46,0.85), #7A1C2E, rgba(122,28,46,0.85));"
+                             title="Bấm giữ chuột để kéo di chuyển rèm vào đúng cửa sổ!">
+                            <div class="w-full h-3 bg-gold-600 shadow-md"></div>
+                            <div class="flex justify-around w-full h-full opacity-35">
+                                <div class="w-px h-full bg-black"></div>
+                                <div class="w-px h-full bg-black"></div>
+                                <div class="w-px h-full bg-black"></div>
+                                <div class="w-px h-full bg-black"></div>
+                                <div class="w-px h-full bg-black"></div>
+                            </div>
+                            <div class="w-full h-3 bg-gold-600 shadow-md"></div>
+                        </div>
+
+                        <div class="absolute bottom-3 left-3 bg-black/75 backdrop-blur-md text-white px-3.5 py-1.5 rounded-xl text-xs flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                            <span>Mẹo: Bạn có thể nhấn giữ và kéo rèm vào vị trí cửa sổ mong muốn!</span>
+                        </div>
+                    </div>
+
+                    <!-- 3D Interactive Room Model -->
+                    <div id="view3dContainer" class="hidden relative w-full h-[480px] bg-gradient-to-b from-neutral-900 via-neutral-800 to-neutral-950 text-white p-6 flex flex-col items-center justify-between room-viewport-3d overflow-hidden">
+                        <div class="w-full flex justify-between items-center text-xs text-neutral-400">
+                            <span><i class="fa-solid fa-cube text-burgundy-500 mr-1"></i> Không Gian 3D Trực Quan</span>
+                            <span>Dùng các nút bên dưới để đổi góc nhìn</span>
+                        </div>
+
+                        <!-- 3D Room Box -->
+                        <div id="roomCube3D" class="room-cube relative w-72 h-80 border-4 border-neutral-700 rounded-xl overflow-hidden shadow-2xl transition-transform duration-500" style="transform: rotateY(0deg) rotateX(4deg);">
+                            <!-- Nền phòng 3D (lấy theo ảnh phòng đã chọn/upload) -->
+                            <img id="roomImage3D" src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover">
+                            
+                            <!-- Rèm 3D nổi bật -->
+                            <div class="absolute inset-0 bg-black/20 pointer-events-none"></div>
+                            <div id="curtain3D" class="absolute top-4 right-6 w-36 h-64 border-y-2 border-gold-400 shadow-2xl transition-colors duration-300" style="background: repeating-linear-gradient(90deg, #7A1C2E, #7A1C2E 12px, #4D0F1B 18px, #7A1C2E 24px);">
+                            </div>
+                            <div class="absolute bottom-3 left-3 right-3 text-center bg-black/60 backdrop-blur-sm rounded-lg p-1.5 text-[11px] text-white">
+                                Góc nhìn phối cảnh thực tế trong phòng
+                            </div>
+                        </div>
+
+                        <!-- Điều hướng 3D -->
+                        <div class="flex items-center space-x-3 pt-2">
+                            <button onclick="rotateRoom(-25)" class="bg-neutral-800 hover:bg-neutral-700 px-4 py-2 rounded-lg text-xs border border-neutral-600 transition">
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Xoay Trái
+                            </button>
+                            <button onclick="rotateRoom(0)" class="bg-burgundy-600 hover:bg-burgundy-700 px-4 py-2 rounded-lg text-xs font-bold transition">
+                                Chính Diện
+                            </button>
+                            <button onclick="rotateRoom(25)" class="bg-neutral-800 hover:bg-neutral-700 px-4 py-2 rounded-lg text-xs border border-neutral-600 transition">
+                                Xoay Phải <i class="fa-solid fa-rotate-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SECTION GAMIFICATION: THỬ THÁCH THỢ RÈM THU HƯƠNG            -->
+    <!-- ============================================================== -->
+    <section id="mini-game" class="py-20 bg-cream-100 border-b border-burgundy-600/20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-10 space-y-2">
+                <span class="inline-flex items-center text-xs font-bold text-burgundy-700 uppercase tracking-widest bg-burgundy-600/10 px-3.5 py-1 rounded-full border border-burgundy-600/20">
+                    <i class="fa-solid fa-gamepad mr-1.5 text-burgundy-600"></i> Mini Game Tương Tác Có Thưởng
+                </span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-neutral-900">Thử Thách Nghệ Nhân Lắp Rèm</h2>
+                <p class="text-xs sm:text-sm text-neutral-600">
+                    Trải nghiệm 3 công đoạn khắt khe bậc nhất của thợ rèm Thu Hương để nhận ngay <strong>Voucher giảm 10%</strong> và đặc quyền đo đạc tại nhà!
+                </p>
+            </div>
+
+            <!-- Khung App Game Mobile & Desktop -->
+            <div class="max-w-md mx-auto bg-cream-50 rounded-3xl border-2 border-burgundy-600/20 shadow-2xl overflow-hidden flex flex-col min-h-[580px] relative">
+                
+                <!-- Game Header -->
+                <div class="bg-white px-5 py-3.5 border-b border-cream-200 flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-7 h-7 rounded-full bg-burgundy-600 text-white flex items-center justify-center text-xs font-serif font-bold">TH</span>
+                        <span class="font-serif text-sm font-bold text-burgundy-800">Tiệm Rèm Thu Hương</span>
+                    </div>
+                    <span id="gameStepBadge" class="text-xs font-bold bg-burgundy-50 text-burgundy-700 border border-burgundy-200 px-3 py-1 rounded-full">
+                        Bắt đầu
+                    </span>
+                </div>
+
+                <!-- GAME SCREEN 0: INTRO -->
+                <div id="gameScreen0" class="p-6 flex-1 flex flex-col justify-between text-center space-y-5">
+                    <div>
+                        <span class="text-4xl">🪡</span>
+                        <h3 class="font-serif text-2xl font-bold text-burgundy-800 mt-2">Nghệ Thuật May Đo & Lắp Rèm</h3>
+                        <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
+                            Tại Thu Hương, một bộ rèm hoàn mỹ bắt buộc phải chuẩn xác 100% từ khâu kéo thước, bắn vít gia cố cho đến việc lựa chọn chất vải chuẩn cho từng không gian.
+                        </p>
+                    </div>
+
+                    <div class="h-44 bg-cream-200/60 rounded-2xl border-2 border-dashed border-burgundy-600/30 flex flex-col items-center justify-center p-4">
+                        <div class="text-5xl mb-2">🪟</div>
+                        <p class="text-xs font-semibold text-neutral-700">Khung cửa đang chờ bạn đo đạc & lắp đặt</p>
+                        <p class="text-[10px] text-neutral-500">Hoàn thành 3 thử thách để nhận chứng nhận & voucher</p>
+                    </div>
+
+                    <div class="bg-amber-50 border-l-4 border-gold-500 p-3 rounded text-left text-xs text-amber-900">
+                        💡 <strong>Cam kết kỹ thuật:</strong> Rèm rủ sóng đẹp và an toàn 10 năm phụ thuộc 70% vào tay nghề thợ.
+                    </div>
+
+                    <button onclick="gameGoToScreen(1)" class="w-full bg-burgundy-600 hover:bg-burgundy-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-lg transition">
+                        Bắt Đầu Thử Thách Ngay ➔
+                    </button>
+                </div>
+
+                <!-- GAME SCREEN 1: KÉO THƯỚC ĐO ĐẠC -->
+                <div id="gameScreen1" class="p-6 flex-1 hidden flex-col justify-between space-y-4">
+                    <div class="text-center">
+                        <h3 class="font-serif text-xl font-bold text-burgundy-800">Màn 1: Cắt Thước Chuẩn Milimet</h3>
+                        <p class="text-xs text-neutral-600 mt-1">Giữ chặt nút bên dưới và thả tay đúng <strong>VÙNG XANH CHUẨN</strong> mép cửa sổ!</p>
+                    </div>
+
+                    <div class="h-40 bg-neutral-100 rounded-xl border-4 border-amber-950 flex flex-col items-center justify-center relative overflow-hidden">
+                        <span id="gameMeasureVal" class="text-2xl font-extrabold text-burgundy-700">0 cm</span>
+                        <span class="text-[11px] text-neutral-500">Khoảng cách chiều ngang khung cửa</span>
+                    </div>
+
+                    <div class="tape-track h-10 rounded-lg">
+                        <div id="gameTapeBar" class="tape-bar"></div>
+                        <div class="target-zone">CHUẨN</div>
+                    </div>
+
+                    <div id="gameLvl1Tip" class="bg-cream-100 p-3 rounded-lg border border-neutral-300 text-xs text-neutral-700">
+                        ⚠️ Thừa 1cm rèm quét sàn lếch thếch. Hụt 1cm ánh nắng sẽ lọt qua kẽ cửa!
+                    </div>
+
+                    <button id="gameMeasureBtn" 
+                            onmousedown="gameStartMeasuring()" 
+                            onmouseup="gameStopMeasuring()" 
+                            ontouchstart="gameStartMeasuring(event)" 
+                            ontouchend="gameStopMeasuring(event)"
+                            class="w-full bg-burgundy-600 hover:bg-burgundy-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-md transition">
+                        📏 Nhấn & Giữ Để Kéo Thước
+                    </button>
+                </div>
+
+                <!-- GAME SCREEN 2: BẮN VÍT TRẦN THẠCH CAO -->
+                <div id="gameScreen2" class="p-6 flex-1 hidden flex-col justify-between space-y-4">
+                    <div class="text-center">
+                        <h3 class="font-serif text-xl font-bold text-burgundy-800">Màn 2: Gia Cố Kết Cấu Ray</h3>
+                        <p class="text-xs text-neutral-600 mt-1">Trần thạch cao âm rất xốp. Bạn dùng phụ kiện nào để treo rèm 15kg không tụt suốt 10 năm?</p>
+                    </div>
+
+                    <div class="space-y-2.5">
+                        <div onclick="gameSelectTool(1, this)" class="game-tool-card bg-white p-3 rounded-xl border-2 border-neutral-200 cursor-pointer flex items-center space-x-3 transition">
+                            <span class="text-2xl">🔩</span>
+                            <div>
+                                <p class="text-xs font-bold text-neutral-800">Vít nở nhựa gia dụng thường</p>
+                                <p class="text-[10px] text-neutral-500">Loại đóng tường bê tông thông thường</p>
+                            </div>
+                        </div>
+
+                        <div onclick="gameSelectTool(2, this)" class="game-tool-card bg-white p-3 rounded-xl border-2 border-neutral-200 cursor-pointer flex items-center space-x-3 transition">
+                            <span class="text-2xl">🔨</span>
+                            <div>
+                                <p class="text-xs font-bold text-neutral-800">Đóng đinh bê tông trực tiếp</p>
+                                <p class="text-[10px] text-neutral-500">Đóng xuyên qua tấm thạch cao</p>
+                            </div>
+                        </div>
+
+                        <div onclick="gameSelectTool(3, this)" class="game-tool-card bg-white p-3 rounded-xl border-2 border-neutral-200 cursor-pointer flex items-center space-x-3 transition">
+                            <span class="text-2xl">🛡️</span>
+                            <div>
+                                <p class="text-xs font-bold text-burgundy-800">Nở bướm chịu lực + Tắc kê sắt chuyên dụng</p>
+                                <p class="text-[10px] text-neutral-500">Khóa ngàm giữ khung xương trần an toàn tuyệt đối</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="gameLvl2Tip" class="bg-cream-100 p-3 rounded-lg border border-neutral-300 text-xs text-neutral-700">
+                        💡 Rèm cao cấp rất nặng. Dùng sai ốc vít có thể làm sập toàn bộ hộp rèm của khách!
+                    </div>
+
+                    <button id="gameLvl2NextBtn" disabled onclick="gameGoToScreen(3)" class="w-full bg-burgundy-600 disabled:bg-neutral-300 disabled:cursor-not-allowed hover:bg-burgundy-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-md transition">
+                        Bắn Vít Cố Định ➔
+                    </button>
+                </div>
+
+                <!-- GAME SCREEN 3: PHỐI RÈM KHÔNG GIAN (RANDOM 5 PHÒNG) -->
+                <div id="gameScreen3" class="p-5 flex-1 hidden flex-col justify-between space-y-3">
+                    <div class="text-center">
+                        <span id="gameRoomBadge" class="inline-block text-[11px] font-bold text-burgundy-700 bg-red-100 px-3 py-0.5 rounded-full mb-1">📍 Phòng Ngủ Hướng Tây</span>
+                        <h3 class="font-serif text-lg font-bold text-burgundy-800">Màn 3: Phối Rèm Đúng Nhu Cầu</h3>
+                        <p id="gameRoomDesc" class="text-xs text-neutral-600">Nắng gắt 40°C chiều rọi vào, cần cản nhiệt và tối 100% để ngủ trưa.</p>
+                    </div>
+
+                    <!-- Khung Cửa Sổ Ướm Thử Rèm Trực Tiếp -->
+                    <div class="h-44 w-full bg-neutral-200 rounded-xl border-4 border-amber-950 relative overflow-hidden flex items-center justify-center">
+                        <div id="gameWindowBg" class="absolute inset-0 flex flex-col items-center justify-center transition-all">
+                            <span id="gameWindowIcon" class="text-4xl">☀️</span>
+                            <span id="gameWindowOutsideDesc" class="text-[10px] font-bold text-neutral-700 mt-1">Nắng Gắt Chiều Hè</span>
+                        </div>
+                        <!-- Lớp rèm thả xuống ướm -->
+                        <div id="gameCurtainPreview" class="absolute inset-0 transition-transform duration-500 translate-y-[-100%]"></div>
+                    </div>
+
+                    <!-- Kệ mẫu vải để chọn -->
+                    <div>
+                        <div class="flex justify-between text-[11px] font-bold text-neutral-500 mb-1.5 uppercase">
+                            <span>Kệ Mẫu Vải Tại Tiệm</span>
+                            <span class="text-burgundy-600">Bấm để ướm thử ⬇</span>
+                        </div>
+                        <div id="gameSwatchGrid" class="grid grid-cols-3 gap-2">
+                            <!-- Render bằng JS -->
+                        </div>
+                    </div>
+
+                    <div id="gameLvl3Tip" class="bg-amber-50 p-2.5 rounded-lg border border-amber-200 text-xs text-amber-900 leading-tight">
+                        👉 Chạm vào từng mẫu vải trên kệ để xem rèm thả xuống khung cửa, sau đó bấm chốt phương án!
+                    </div>
+
+                    <button id="gameConfirmBtn" disabled onclick="gameCheckCurtainChoice()" class="w-full bg-burgundy-600 disabled:bg-neutral-300 disabled:cursor-not-allowed hover:bg-burgundy-700 text-white font-bold py-3 rounded-xl text-sm shadow-md transition">
+                        Chốt Phương Án Này ➔
+                    </button>
+                </div>
+
+                <!-- GAME SCREEN 4: VINH DANH & NHẬN VOUCHER -->
+                <div id="gameScreen4" class="p-6 flex-1 hidden flex-col justify-between space-y-4 text-center">
+                    <div>
+                        <span class="text-5xl">🎖️</span>
+                        <h3 class="font-serif text-2xl font-bold text-burgundy-800 mt-2">Xuất Sắc! Nghệ Nhân Rèm</h3>
+                        <p class="text-xs text-neutral-600 mt-1">Bạn đã vượt qua toàn bộ tiêu chuẩn may đo khắt khe của Tiệm Rèm Thu Hương!</p>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-cream-50 to-amber-50 border-2 border-dashed border-gold-500 rounded-2xl p-4 text-left space-y-2">
+                        <p class="text-xs font-bold text-burgundy-800 uppercase tracking-wider">Đặc Quyền Dành Tặng Riêng Bạn:</p>
+                        <p class="text-xs text-neutral-800 font-semibold"><i class="fa-solid fa-gift text-gold-500 mr-1.5"></i> Voucher giảm ngay 10% tổng hóa đơn may rèm</p>
+                        <p class="text-xs text-neutral-800 font-semibold"><i class="fa-solid fa-truck text-gold-500 mr-1.5"></i> Miễn phí 100% khảo sát & mang mẫu vải tận nhà</p>
+                        <p class="text-xs text-neutral-800 font-semibold"><i class="fa-solid fa-soap text-gold-500 mr-1.5"></i> Miễn phí 1 lần giặt hấp bảo dưỡng rèm sau 1 năm</p>
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl border border-cream-200">
+                        <p class="text-[11px] text-neutral-500">Mã voucher của bạn:</p>
+                        <p class="font-mono font-extrabold text-burgundy-700 text-lg tracking-widest">THUHUONG10VIP</p>
+                    </div>
+
+                    <a href="#lien-he" onclick="applyVoucherCode('THUHUONG10VIP')" class="w-full bg-burgundy-600 hover:bg-burgundy-700 text-white font-bold py-3.5 rounded-xl text-sm shadow-lg transition block">
+                        Áp Dụng Ưu Đãi & Đặt Lịch Đo Ngay ➔
+                    </a>
+                </div>
+
+                <!-- Popup Modal khi chọn sai rèm -->
+                <div id="gameFailModal" class="absolute inset-0 bg-black/70 backdrop-blur-xs hidden items-center justify-center p-6 z-50">
+                    <div class="bg-white rounded-2xl p-6 text-center space-y-4 max-w-sm border-2 border-burgundy-600 shadow-2xl">
+                        <span class="text-4xl">🤔</span>
+                        <h4 class="font-serif text-lg font-bold text-burgundy-800">Chưa Đạt Tiêu Chuẩn Rồi!</h4>
+                        <p id="gameFailReasonText" class="text-xs text-neutral-600 leading-relaxed">
+                            Lý do rèm chưa phù hợp...
+                        </p>
+                        <button onclick="gameRetryWithNewRoom()" class="w-full bg-burgundy-600 hover:bg-burgundy-700 text-white font-bold py-2.5 rounded-xl text-xs transition">
+                            🔄 Đổi Sang Không Gian Khác & Thử Lại
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Collections Section (Fixed Korean Rainbow Blind image) -->
+    <section id="bo-suu-tap" class="py-20 bg-cream-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-burgundy-600 font-semibold tracking-wider uppercase text-sm">Sản phẩm chủ lực</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-neutral-900">Bộ Sưu Tập Rèm Cửa Cao Cấp</h2>
+                <p class="text-neutral-600">Đa dạng mẫu mã từ hiện đại đến cổ điển dưới bàn tay may đo chuyên nghiệp của Tiệm Rèm Thu Hương.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Card 1: Rèm Vải 2 Lớp -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-neutral-200 group">
+                    <div class="relative overflow-hidden h-64 bg-neutral-200">
+                        <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80" alt="Rem vai 2 lop cao cap" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-burgundy-600 text-white text-[10px] px-2.5 py-1 rounded-full uppercase font-semibold">Bán chạy nhất</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <h3 class="font-serif text-lg font-bold text-neutral-900">Rèm Vải 2 Lớp Cao Cấp</h3>
+                        <p class="text-xs text-neutral-600 leading-relaxed">Sự kết hợp hoàn hảo giữa lớp vải chống nắng tuyệt đối và lớp voan trắng tinh khôi thêu hoa văn tinh tế.</p>
+                        <div class="pt-2 flex items-center justify-between">
+                            <span class="text-burgundy-800 font-bold text-sm">Chỉ từ 650k/mét ngang</span>
+                            <a href="#lien-he" class="text-xs font-semibold text-burgundy-600 hover:underline">Tư vấn ngay &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Rèm Cầu Vồng Hàn Quốc (Đã thay ảnh chuẩn sắc nét) -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-neutral-200 group">
+                    <div class="relative overflow-hidden h-64 bg-neutral-200">
+                        <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=600&q=80" alt="Rem cau vong Han Quoc Modero" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-amber-600 text-white text-[10px] px-2.5 py-1 rounded-full uppercase font-semibold">Xu hướng</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <h3 class="font-serif text-lg font-bold text-neutral-900">Rèm Cầu Vồng Hàn Quốc</h3>
+                        <p class="text-xs text-neutral-600 leading-relaxed">Thiết kế 2 lớp vải so le hiện đại, gọn gàng, điều chỉnh ánh sáng linh hoạt, nhập khẩu chính hãng Modero.</p>
+                        <div class="pt-2 flex items-center justify-between">
+                            <span class="text-burgundy-800 font-bold text-sm">Chỉ từ 480k/m²</span>
+                            <a href="#lien-he" class="text-xs font-semibold text-burgundy-600 hover:underline">Tư vấn ngay &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Rèm Sáo Gỗ Tự Nhiên -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-neutral-200 group">
+                    <div class="relative overflow-hidden h-64 bg-neutral-200">
+                        <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=600&q=80" alt="Rem sao go tu nhien" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <h3 class="font-serif text-lg font-bold text-neutral-900">Rèm Sáo Gỗ Tự Nhiên</h3>
+                        <p class="text-xs text-neutral-600 leading-relaxed">Chất liệu gỗ Basswood tự nhiên 100%, sơn UV chống cong vênh mối mọt, mang lại cảm giác ấm cúng quý phái.</p>
+                        <div class="pt-2 flex items-center justify-between">
+                            <span class="text-burgundy-800 font-bold text-sm">Chỉ từ 720k/m²</span>
+                            <a href="#lien-he" class="text-xs font-semibold text-burgundy-600 hover:underline">Tư vấn ngay &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Rèm Cuốn Chống Nắng -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-neutral-200 group">
+                    <div class="relative overflow-hidden h-64 bg-neutral-200">
+                        <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=600&q=80" alt="Rem cuon chong nang van phong" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <h3 class="font-serif text-lg font-bold text-neutral-900">Rèm Cuốn Chống Nắng</h3>
+                        <p class="text-xs text-neutral-600 leading-relaxed">Giải pháp cản nhiệt 100% cho cửa kính lớn, quán cà phê, văn phòng với độ bền vượt trội và giá thành tiết kiệm.</p>
+                        <div class="pt-2 flex items-center justify-between">
+                            <span class="text-burgundy-800 font-bold text-sm">Chỉ từ 280k/m²</span>
+                            <a href="#lien-he" class="text-xs font-semibold text-burgundy-600 hover:underline">Tư vấn ngay &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Price Calculator Section -->
+    <section id="tinh-gia" class="py-20 bg-white border-t border-neutral-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-cream-50 p-8 sm:p-12 rounded-3xl border border-burgundy-600/20 shadow-lg space-y-8">
+                <div class="text-center space-y-2">
+                    <span class="text-burgundy-600 font-semibold uppercase text-xs tracking-wider">Tiện ích thông minh</span>
+                    <h2 class="font-serif text-3xl font-bold text-neutral-900">Tính Chi Phí Rèm Cửa Tự Động</h2>
+                    <p class="text-xs text-neutral-600">Nhập kích thước khung cửa dự kiến để ước tính chi phí sơ bộ trước khi Tiệm Rèm Thu Hương qua đo đạc thực tế.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-xs font-semibold text-neutral-700 mb-2">Loại Rèm</label>
+                        <select id="calcType" class="w-full px-4 py-3 rounded-xl border border-neutral-300 bg-white text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
+                            <option value="650000">Rèm Vải 2 Lớp (650k/mét ngang)</option>
+                            <option value="480000">Rèm Cầu Vồng (480k/m²)</option>
+                            <option value="720000">Rèm Sáo Gỗ (720k/m²)</option>
+                            <option value="280000">Rèm Cuốn (280k/m²)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-neutral-700 mb-2">Chiều Ngang (mét)</label>
+                        <input type="number" id="calcWidth" value="3" step="0.1" class="w-full px-4 py-3 rounded-xl border border-neutral-300 bg-white text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-neutral-700 mb-2">Chiều Cao (mét)</label>
+                        <input type="number" id="calcHeight" value="2.8" step="0.1" class="w-full px-4 py-3 rounded-xl border border-neutral-300 bg-white text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between bg-white p-6 rounded-2xl border border-burgundy-600/20 shadow-sm">
+                    <div>
+                        <p class="text-xs text-neutral-500 uppercase tracking-wider">Ước tính chi phí tạm tính:</p>
+                        <p id="calcResult" class="font-serif text-3xl font-bold text-burgundy-800">1,950,000 VNĐ</p>
+                    </div>
+                    <button onclick="calculatePrice()" class="mt-4 sm:mt-0 bg-burgundy-600 hover:bg-burgundy-700 text-white px-6 py-3 rounded-xl font-medium text-sm shadow-md transition">
+                        Tính Lại Chi Phí
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Zalo Integration Form Section -->
+    <section id="lien-he" class="py-20 bg-gradient-to-b from-cream-100 to-cream-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white p-8 sm:p-12 rounded-3xl shadow-xl border border-burgundy-600/20">
+                <div class="text-center space-y-3 mb-10">
+                    <span class="text-burgundy-600 font-semibold uppercase text-xs tracking-wider">Kết nối may đo tận nơi</span>
+                    <h2 class="font-serif text-3xl font-bold text-neutral-900">Đăng Ký Tư Vấn & Khảo Sát Tận Nhà</h2>
+                    <p class="text-xs text-neutral-600">
+                        Điền thông tin bên dưới để hệ thống chuyển hướng trực tiếp sang <strong>Zalo Tiệm Rèm Thu Hương (Hotline: 0383.818.553)</strong> nhận mẫu catalogue vải tận nơi!
+                    </p>
+                </div>
+
+                <form onsubmit="submitToZalo(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 mb-2">Họ và Tên của bạn *</label>
+                            <input type="text" id="cusName" required placeholder="Ví dụ: Chị Lan" class="w-full px-4 py-3 rounded-xl border border-neutral-300 text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 mb-2">Số Điện Thoại Zalo *</label>
+                            <input type="tel" id="cusPhone" required placeholder="Ví dụ: 0905xxxxxx" class="w-full px-4 py-3 rounded-xl border border-neutral-300 text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 mb-2">Địa Chỉ Nhà / Công Trình *</label>
+                            <input type="text" id="cusAddress" required placeholder="Ví dụ: 129 Điện Biên Phủ, Nam Phước" class="w-full px-4 py-3 rounded-xl border border-neutral-300 text-sm focus:ring-2 focus:ring-burgundy-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700 mb-2">Mã Giảm Giá / Voucher (nếu có)</label>
+                            <input type="text" id="cusVoucher" placeholder="Ví dụ: THUHUONG10VIP" class="w-full px-4 py-3 rounded-xl border border-neutral-300 text-sm font-mono uppercase focus:ring-2 focus:ring-burgundy-600 outline-none bg-amber-50/50">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-neutral-700 mb-2">Yêu Cầu / Mẫu Rèm & Màu Sắc Quan Tâm</label>
+                        <textarea id="cusNote" rows="3" placeholder="Ví dụ: Tôi muốn tư vấn rèm vải 2 lớp chống nắng cho phòng khách hướng Tây..." class="w-full px-4 py-3 rounded-xl border border-neutral-300 text-sm focus:ring-2 focus:ring-burgundy-600 outline-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-burgundy-600 hover:bg-burgundy-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-burgundy-600/30 transition flex items-center justify-center space-x-2 text-base">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Gửi Yêu Cầu & Kết Nối Zalo Tiệm Rèm Thu Hương Ngay</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-neutral-900 text-neutral-400 py-12 border-t border-neutral-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2">
+                    <span class="w-8 h-8 rounded-full bg-burgundy-600 text-white flex items-center justify-center font-serif text-sm font-bold">TH</span>
+                    <h3 class="font-serif text-white text-lg font-bold">Tiệm Rèm Thu Hương</h3>
+                </div>
+                <p class="text-xs leading-relaxed">
+                    Chuyên cung cấp, may đo và lắp đặt màn rèm cửa cao cấp, mang lại vẻ đẹp quý phái và không gian thư thái cho mọi công trình tại Quảng Nam, Đà Nẵng.
+                </p>
+            </div>
+            <div class="space-y-3">
+                <h4 class="font-serif text-white font-semibold">Thông Tin Liên Hệ</h4>
+                <p class="text-xs"><i class="fa-solid fa-location-dot mr-2 text-burgundy-500"></i> 129 Điện Biên Phủ, Nam Phước, Quảng Nam</p>
+                <p class="text-xs"><i class="fa-solid fa-phone mr-2 text-burgundy-500"></i> Hotline / Zalo: 0383.818.553 (Tiệm Rèm Thu Hương)</p>
+            </div>
+            <div class="space-y-3">
+                <h4 class="font-serif text-white font-semibold">Giờ Hoạt Động</h4>
+                <p class="text-xs">Thứ Hai - Chủ Nhật: 07:30 - 20:30</p>
+                <p class="text-xs text-burgundy-400 font-medium">Khảo sát, mang bảng mẫu vải tư vấn miễn phí tận nơi mọi lúc theo lịch hẹn của quý khách.</p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-neutral-800 text-center text-xs text-neutral-500">
+            &copy; 2026 Tiệm Rèm Thu Hương. All rights reserved. 129 Điện Biên Phủ, Nam Phước, Quảng Nam.
+        </div>
+    </footer>
+
+    <!-- MODAL ĐĂNG NHẬP / TÍCH ĐIỂM THÀNH VIÊN -->
+    <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-xs hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full space-y-5 border border-burgundy-600/30 shadow-2xl relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 rounded-full bg-burgundy-600 text-white flex items-center justify-center font-serif text-xl font-bold mx-auto mb-2">TH</div>
+                <h3 class="font-serif text-xl font-bold text-burgundy-800">Đăng Nhập Thành Viên</h3>
+                <p class="text-xs text-neutral-500">Theo dõi tiến độ đơn rèm & nhận chiết khấu VIP</p>
+            </div>
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-neutral-700 mb-1">Số Điện Thoại Đã Đặt Rèm</label>
+                    <input type="tel" id="authPhone" required placeholder="0905xxxxxx" class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-xs focus:ring-2 focus:ring-burgundy-600 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-neutral-700 mb-1">Mã Khách Hàng / Mật Khẩu</label>
+                    <input type="password" id="authPass" required placeholder="••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-xs focus:ring-2 focus:ring-burgundy-600 outline-none">
+                </div>
+                <button type="submit" class="w-full bg-burgundy-600 hover:bg-burgundy-700 text-white font-bold py-3 rounded-xl text-xs shadow-md transition">
+                    Đăng Nhập Ngay
+                </button>
+            </form>
+            <p class="text-[11px] text-center text-neutral-400">
+                Chưa có tài khoản? Khi bạn đặt may rèm tại tiệm, hệ thống sẽ tự động kích hoạt tài khoản VIP theo số điện thoại của bạn.
+            </p>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- JAVASCRIPT: TÍNH NĂNG AI, 3D VÀ GAMIFICATION HOÀN CHỈNH       -->
+    <!-- ============================================================== -->
+    <script>
+        // ---------------- AI ROOM & 3D LOGIC ----------------
+        let currentRoomImageUrl = 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1200&q=80';
+        let currentCurtainColor = '#7A1C2E';
+
+        function setPresetRoom(imgUrl) {
+            currentRoomImageUrl = imgUrl;
+            document.getElementById('roomImageDisplay').src = imgUrl;
+            document.getElementById('roomImage3D').src = imgUrl;
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentRoomImageUrl = e.target.result;
+                    document.getElementById('roomImageDisplay').src = currentRoomImageUrl;
+                    document.getElementById('roomImage3D').src = currentRoomImageUrl;
+                    alert('Đã tải ảnh phòng thành công! Bạn có thể xem cả ở chế độ AI 2D và mô hình 3D.');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateCurtainStyle(colorCode, name) {
+            currentCurtainColor = colorCode;
+            document.getElementById('colorPicker').value = colorCode;
+            document.getElementById('hexInput').value = colorCode;
+            applyCurtainColor(colorCode, name);
+        }
+
+        function updateColorPicker(colorCode) {
+            currentCurtainColor = colorCode;
+            document.getElementById('hexInput').value = colorCode;
+            applyCurtainColor(colorCode, `Mã màu (${colorCode})`);
+        }
+
+        function updateCustomHex(hexVal) {
+            if(hexVal.startsWith('#') && (hexVal.length === 4 || hexVal.length === 7)) {
+                currentCurtainColor = hexVal;
+                document.getElementById('colorPicker').value = hexVal;
+                applyCurtainColor(hexVal, `Mã màu (${hexVal})`);
+            }
+        }
+
+        function applyCurtainColor(colorCode, name) {
+            const overlay = document.getElementById('curtainOverlay');
+            overlay.style.background = `linear-gradient(to right, ${colorCode}cc, ${colorCode}, ${colorCode}cc)`;
+            
+            const curtain3D = document.getElementById('curtain3D');
+            curtain3D.style.background = `repeating-linear-gradient(90deg, ${colorCode}, ${colorCode} 12px, #333333 18px, ${colorCode} 24px)`;
+
+            const adviceEl = document.getElementById('aiAdviceText');
+            adviceEl.innerHTML = `Đang chọn: <strong class="text-burgundy-800">${name}</strong>. Màu rèm hòa hợp với không gian, tạo điểm nhấn ấm áp và thanh lịch cho ngôi nhà.`;
+        }
+
+        function setViewMode(mode) {
+            const btn2d = document.getElementById('btn2d');
+            const btn3d = document.getElementById('btn3d');
+            const v2d = document.getElementById('view2dContainer');
+            const v3d = document.getElementById('view3dContainer');
+
+            if(mode === '2d') {
+                btn2d.className = "py-2 px-3 text-xs font-bold rounded-xl bg-burgundy-600 text-white shadow transition";
+                btn3d.className = "py-2 px-3 text-xs font-bold rounded-xl bg-white text-neutral-700 border border-neutral-300 shadow-sm transition";
+                v2d.classList.remove('hidden');
+                v3d.classList.add('hidden');
+            } else {
+                btn3d.className = "py-2 px-3 text-xs font-bold rounded-xl bg-burgundy-600 text-white shadow transition";
+                btn2d.className = "py-2 px-3 text-xs font-bold rounded-xl bg-white text-neutral-700 border border-neutral-300 shadow-sm transition";
+                v3d.classList.remove('hidden');
+                v2d.classList.add('hidden');
+            }
+        }
+
+        // Xoay phòng 3D
+        let currentRotationY = 0;
+        function rotateRoom(deg) {
+            currentRotationY = deg;
+            document.getElementById('roomCube3D').style.transform = `rotateY(${deg}deg) rotateX(4deg)`;
+        }
+
+        // Kéo thả rèm trên ảnh phòng 2D
+        const dragCurtain = document.getElementById('curtainOverlay');
+        let isDragging = false, startX, startY, origLeft, origTop;
+
+        dragCurtain.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            origLeft = dragCurtain.offsetLeft;
+            origTop = dragCurtain.offsetTop;
+            dragCurtain.style.transition = 'none';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            dragCurtain.style.left = (origLeft + dx) + 'px';
+            dragCurtain.style.top = (origTop + dy) + 'px';
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                dragCurtain.style.transition = 'colors 0.3s';
+            }
+        });
+
+        // ---------------- MINI GAME GAMIFICATION ----------------
+        function gameSetBadge(text) {
+            document.getElementById('gameStepBadge').innerText = text;
+        }
+
+        function gameGoToScreen(screenIdx) {
+            for (let i = 0; i <= 4; i++) {
+                const s = document.getElementById('gameScreen' + i);
+                if (s) {
+                    s.classList.add('hidden');
+                    s.classList.remove('flex');
+                }
+            }
+            const target = document.getElementById('gameScreen' + screenIdx);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('flex');
+            }
+
+            if (screenIdx === 1) gameSetBadge('Màn 1/3');
+            if (screenIdx === 2) gameSetBadge('Màn 2/3');
+            if (screenIdx === 3) {
+                gameSetBadge('Màn 3/3');
+                gameLoadRandomRoom();
+            }
+            if (screenIdx === 4) gameSetBadge('Vinh Danh 🏆');
+        }
+
+        // MÀN 1: KÉO THƯỚC
+        let gameTapeProgress = 0;
+        let gameTapeInterval = null;
+
+        function gameStartMeasuring(e) {
+            if(e) e.preventDefault();
+            gameTapeProgress = 0;
+            const bar = document.getElementById('gameTapeBar');
+            const val = document.getElementById('gameMeasureVal');
+            clearInterval(gameTapeInterval);
+            gameTapeInterval = setInterval(() => {
+                if (gameTapeProgress < 100) {
+                    gameTapeProgress += 1.6;
+                    bar.style.width = gameTapeProgress + '%';
+                    val.innerText = Math.round(gameTapeProgress * 2.8) + ' cm';
+                } else {
+                    gameStopMeasuring();
+                }
+            }, 30);
+        }
+
+        function gameStopMeasuring(e) {
+            if(e) e.preventDefault();
+            clearInterval(gameTapeInterval);
+            const tip = document.getElementById('gameLvl1Tip');
+            if (gameTapeProgress >= 78 && gameTapeProgress <= 92) {
+                tip.innerHTML = "✅ <strong>Đo chuẩn từng milimet!</strong> Kích thước khớp hoàn toàn với khung cửa.";
+                tip.className = "bg-green-50 p-3 rounded-lg border border-green-300 text-xs text-green-800";
+                document.getElementById('gameMeasureBtn').disabled = true;
+                setTimeout(() => gameGoToScreen(2), 1200);
+            } else {
+                tip.innerHTML = "❌ <strong>Lệch kích thước!</strong> Rèm sẽ bị quét đất hoặc lọt sáng. Nhấn giữ để đo lại!";
+                tip.className = "bg-red-50 p-3 rounded-lg border border-red-300 text-xs text-red-800";
+            }
+        }
+
+        // MÀN 2: BẮN VÍT
+        function gameSelectTool(opt, el) {
+            document.querySelectorAll('.game-tool-card').forEach(c => {
+                c.classList.remove('border-burgundy-600', 'bg-red-50/50');
+                c.classList.add('border-neutral-200');
+            });
+            el.classList.add('border-burgundy-600', 'bg-red-50/50');
+            el.classList.remove('border-neutral-200');
+
+            const tip = document.getElementById('gameLvl2Tip');
+            const btn = document.getElementById('gameLvl2NextBtn');
+
+            if (opt === 1) {
+                tip.innerHTML = "❌ <strong>Sai lầm:</strong> Vít nở nhựa sẽ tuột sau 1 tháng vì thạch cao rất xốp!";
+                tip.className = "bg-red-50 p-3 rounded-lg border border-red-300 text-xs text-red-800";
+                btn.disabled = true;
+            } else if (opt === 2) {
+                tip.innerHTML = "❌ <strong>Hỏng trần:</strong> Đóng đinh làm vỡ nát tấm thạch cao ngay lập tức!";
+                tip.className = "bg-red-50 p-3 rounded-lg border border-red-300 text-xs text-red-800";
+                btn.disabled = true;
+            } else if (opt === 3) {
+                tip.innerHTML = "🛡️ <strong>Chuẩn kỹ thuật Thu Hương:</strong> Nở bướm xòe cánh ôm chặt bề mặt thạch cao, chịu tải 15-20kg an toàn.";
+                tip.className = "bg-green-50 p-3 rounded-lg border border-green-300 text-xs text-green-800";
+                btn.disabled = false;
+            }
+        }
+
+        // MÀN 3: KHO DỮ LIỆU 5 KHÔNG GIAN
+        const GAME_ROOMS = [
+            {
+                title: "📍 Phòng Ngủ Hướng Tây Nắng Gắt",
+                desc: "Nắng 40°C chiếu thẳng vào phòng, cần cản nhiệt và tối tuyệt đối để ngủ sâu giấc.",
+                outsideIcon: "☀️",
+                outsideDesc: "Nắng Chiều Gắt",
+                bg: "linear-gradient(135deg, #ff7043, #ffe082)",
+                options: [
+                    { name: "Rèm Voan Mỏng", css: "curtain-voan", sample: "rgba(255,255,255,0.8)", correct: false, fail: "Rèm voan chỉ cản sáng 20%! Phòng ngủ hướng Tây sẽ nóng hầm hập như lò nướng." },
+                    { name: "Rèm Vải 2 Lớp Cản Sáng 100%", css: "curtain-blackout", sample: "#7A1C2E", correct: true, reason: "Lớp vải dệt cao su non cản sáng 100%, giữ nhiệt máy lạnh mát rượi!" },
+                    { name: "Rèm Sáo Nhôm", css: "curtain-nhom", sample: "#b0bec5", correct: false, fail: "Sáo nhôm kim loại hấp thụ nhiệt làm phòng ngủ càng thêm oi bức." }
+                ]
+            },
+            {
+                title: "📍 Văn Phòng Công Sở Hiện Đại",
+                desc: "Nhiều máy tính và cửa kính lớn. Cần tối giản, chống lóa màn hình và không bám bụi.",
+                outsideIcon: "🏢",
+                outsideDesc: "Kính Phản Quang",
+                bg: "linear-gradient(135deg, #cfd8dc, #eceff1)",
+                options: [
+                    { name: "Rèm Cuốn Phủ Nhựa PVC", css: "curtain-cuon", sample: "#d6c6b2", correct: true, reason: "Rèm cuốn gọn gàng, chống bám bụi và chống chói màn hình máy tính tuyệt hảo!" },
+                    { name: "Rèm Vải Gấm Dày", css: "curtain-blackout", sample: "#7A1C2E", correct: false, fail: "Rèm vải quá rườm rà trong văn phòng, dễ bám bụi bẩn và tốn diện tích." },
+                    { name: "Rèm Voan Hoa", css: "curtain-voan", sample: "rgba(255,255,255,0.8)", correct: false, fail: "Rèm voan mỏng không chống lóa được cho màn hình máy tính." }
+                ]
+            },
+            {
+                title: "📍 Phòng Tắm / Bồn Tắm Ẩm Ướt",
+                desc: "Độ ẩm cao và thường xuyên văng nước. Cần che kín nhưng không được ẩm mốc, rỉ sét.",
+                outsideIcon: "🚿",
+                outsideDesc: "Hơi Nước Ẩm",
+                bg: "linear-gradient(135deg, #b2ebf2, #e0f7fa)",
+                options: [
+                    { name: "Rèm Vải Nhung", css: "curtain-blackout", sample: "#7A1C2E", correct: false, fail: "Rèm vải treo nhà tắm sẽ hút nước ẩm mốc đen và sinh mùi khó chịu." },
+                    { name: "Rèm Sáo Nhôm Tĩnh Điện", css: "curtain-nhom", sample: "#b0bec5", correct: true, reason: "Nhôm sơn tĩnh điện 100% chống nước, không rỉ sét và điều chỉnh góc xoay linh hoạt!" },
+                    { name: "Rèm Cuốn Vải Bố", css: "curtain-cuon", sample: "#d6c6b2", correct: false, fail: "Vải bố ngấm nước sẽ nhanh hỏng sợi và hoen rỉ phụ kiện kéo." }
+                ]
+            },
+            {
+                title: "📍 Góc Đọc Sách Studio Nhỏ",
+                desc: "Khung cửa sổ lọt lòng nhỏ gọn. Cần phong cách Hàn Quốc hiện đại và điều chỉnh sáng đan xen.",
+                outsideIcon: "☕",
+                outsideDesc: "Ánh Sáng Dịu",
+                bg: "linear-gradient(135deg, #ffe0b2, #fff3e0)",
+                options: [
+                    { name: "Rèm Cầu Vồng Modero", css: "curtain-cauvong", sample: "#8B1518", correct: true, reason: "Thiết kế 2 lớp so le tinh tế, lắp lọt lòng cửa sổ cực kỳ hiện đại và gọn gàng!" },
+                    { name: "Rèm Vải Đại Bản Dài", css: "curtain-blackout", sample: "#4D0F1B", correct: false, fail: "Cửa sổ nhỏ lắp rèm vải quét dài làm căn phòng chật chội và bí bách." },
+                    { name: "Rèm Nhôm Trắng", css: "curtain-nhom", sample: "#b0bec5", correct: false, fail: "Rèm nhôm thô cứng, làm mất đi sự ấm cúng của góc thư giãn đọc sách." }
+                ]
+            },
+            {
+                title: "📍 Phòng Khách Biệt Thự Cao Cấp",
+                desc: "Cửa vòm lớn nhìn ra sân vườn. Cần vẻ đẹp tráng lệ, vừa cản nắng vừa lấy sáng thơ mộng.",
+                outsideIcon: "🌿",
+                outsideDesc: "Vườn Biệt Thự",
+                bg: "linear-gradient(135deg, #c8e6c9, #e8f5e9)",
+                options: [
+                    { name: "Rèm Cuốn Nhựa", css: "curtain-cuon", sample: "#d6c6b2", correct: false, fail: "Rèm cuốn đơn điệu làm mất đi vẻ sang trọng của phòng khách biệt thự." },
+                    { name: "Rèm Sáo Nhôm", css: "curtain-nhom", sample: "#b0bec5", correct: false, fail: "Rèm nhôm không hợp phong cách nội thất cao cấp của biệt thự." },
+                    { name: "Rèm Vải 2 Lớp Âm Trần Sóng Rủ", css: "curtain-blackout", sample: "#7A1C2E", correct: true, reason: "Chuẩn phong cách 5 sao! Lớp vải dệt sóng rủ thướt tha tôn vinh toàn bộ căn nhà!" }
+                ]
+            }
+        ];
+
+        let gameCurrentRoom = null;
+        let gameSelectedCurtain = null;
+        let gameAvailableRoomIndices = [0, 1, 2, 3, 4];
+
+        function gameLoadRandomRoom() {
+            const randIdx = Math.floor(Math.random() * gameAvailableRoomIndices.length);
+            const actualIdx = gameAvailableRoomIndices[randIdx];
+            gameCurrentRoom = GAME_ROOMS[actualIdx];
+
+            document.getElementById('gameRoomBadge').innerText = gameCurrentRoom.title;
+            document.getElementById('gameRoomDesc').innerText = gameCurrentRoom.desc;
+            document.getElementById('gameWindowIcon').innerText = gameCurrentRoom.outsideIcon;
+            document.getElementById('gameWindowOutsideDesc').innerText = gameCurrentRoom.outsideDesc;
+            document.getElementById('gameWindowBg').style.background = gameCurrentRoom.bg;
+
+            const preview = document.getElementById('gameCurtainPreview');
+            preview.className = "absolute inset-0 transition-transform duration-500 translate-y-[-100%]";
+            gameSelectedCurtain = null;
+            document.getElementById('gameConfirmBtn').disabled = true;
+
+            const grid = document.getElementById('gameSwatchGrid');
+            grid.innerHTML = '';
+
+            gameCurrentRoom.options.forEach((opt) => {
+                const card = document.createElement('div');
+                card.className = "game-swatch-card bg-white border-2 border-neutral-200 rounded-xl p-2 text-center cursor-pointer hover:border-burgundy-600 transition flex flex-col items-center";
+                card.onclick = () => gamePreviewCurtain(opt, card);
+                card.innerHTML = `
+                    <div class="w-full h-7 rounded mb-1" style="background: ${opt.sample};"></div>
+                    <span class="text-[10px] font-bold text-neutral-800 leading-tight">${opt.name}</span>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('gameLvl3Tip').innerHTML = "👉 Chạm vào mẫu rèm để thả rèm ướm thử lên khung cửa, sau đó bấm chốt phương án!";
+            document.getElementById('gameLvl3Tip').className = "bg-amber-50 p-2.5 rounded-lg border border-amber-200 text-xs text-amber-900 leading-tight";
+        }
+
+        function gamePreviewCurtain(opt, cardEl) {
+            document.querySelectorAll('.game-swatch-card').forEach(c => c.classList.remove('border-burgundy-600', 'bg-red-50/50'));
+            cardEl.classList.add('border-burgundy-600', 'bg-red-50/50');
+            cardEl.classList.remove('border-neutral-200');
+
+            gameSelectedCurtain = opt;
+            const preview = document.getElementById('gameCurtainPreview');
+            preview.className = `absolute inset-0 transition-transform duration-500 translate-y-0 ${opt.css}`;
+
+            const btn = document.getElementById('gameConfirmBtn');
+            btn.disabled = false;
+            btn.innerHTML = `Chốt Dùng [${opt.name}] ➔`;
+        }
+
+        function gameCheckCurtainChoice() {
+            if (!gameSelectedCurtain) return;
+
+            if (gameSelectedCurtain.correct) {
+                const tip = document.getElementById('gameLvl3Tip');
+                tip.innerHTML = `🎉 <strong>CHUẨN XÁC:</strong> ${gameSelectedCurtain.reason}`;
+                tip.className = "bg-green-50 p-2.5 rounded-lg border border-green-300 text-xs text-green-800 leading-tight";
+                document.getElementById('gameConfirmBtn').disabled = true;
+                setTimeout(() => gameGoToScreen(4), 1600);
+            } else {
+                document.getElementById('gameFailReasonText').innerText = gameSelectedCurtain.fail;
+                document.getElementById('gameFailModal').classList.remove('hidden');
+                document.getElementById('gameFailModal').classList.add('flex');
+            }
+        }
+
+        function gameRetryWithNewRoom() {
+            document.getElementById('gameFailModal').classList.add('hidden');
+            document.getElementById('gameFailModal').classList.remove('flex');
+            
+            // Random phòng khác
+            if (gameAvailableRoomIndices.length > 1) {
+                const currentIdx = GAME_ROOMS.indexOf(gameCurrentRoom);
+                gameAvailableRoomIndices = gameAvailableRoomIndices.filter(i => i !== currentIdx);
+            } else {
+                gameAvailableRoomIndices = [0, 1, 2, 3, 4];
+            }
+            gameLoadRandomRoom();
+        }
+
+        function applyVoucherCode(code) {
+            const input = document.getElementById('cusVoucher');
+            if (input) {
+                input.value = code;
+                input.classList.add('ring-2', 'ring-green-500');
+            }
+        }
+
+        // ---------------- CALCULATOR & FORM LOGIC ----------------
+        function calculatePrice() {
+            const pricePerUnit = parseFloat(document.getElementById('calcType').value);
+            const w = parseFloat(document.getElementById('calcWidth').value) || 0;
+            const h = parseFloat(document.getElementById('calcHeight').value) || 0;
+            const total = pricePerUnit * w * (pricePerUnit === 650000 ? 1 : h);
+            document.getElementById('calcResult').innerText = total.toLocaleString('vi-VN') + ' VNĐ';
+        }
+
+        function submitToZalo(event) {
+            event.preventDefault();
+            const name = document.getElementById('cusName').value;
+            const phone = document.getElementById('cusPhone').value;
+            const address = document.getElementById('cusAddress').value;
+            const voucher = document.getElementById('cusVoucher').value;
+            const note = document.getElementById('cusNote').value;
+
+            alert('Cảm ơn ' + name + '! Hệ thống đã ghi nhận thông tin và đang chuyển hướng sang Zalo của Tiệm Rèm Thu Hương để tư vấn trực tiếp.');
+
+            const voucherText = voucher ? `\n- Mã ưu đãi Voucher: ${voucher}` : '';
+            const message = encodeURIComponent(`Xin chào Tiệm Rèm Thu Hương (129 Điện Biên Phủ, Nam Phước), tôi cần tư vấn rèm cửa:\n- Họ tên: ${name}\n- SĐT Zalo: ${phone}\n- Địa chỉ: ${address}${voucherText}\n- Yêu cầu chi tiết: ${note}`);
+            const zaloLink = `https://zalo.me/84383818553?text=${message}`; 
+
+            window.open(zaloLink, '_blank');
+        }
+
+        // Auth Modal Handlers
+        function openAuthModal() {
+            document.getElementById('authModal').classList.remove('hidden');
+            document.getElementById('authModal').classList.add('flex');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('authModal').classList.remove('flex');
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const phone = document.getElementById('authPhone').value;
+            alert('Xin chào quý khách! Hệ thống Tiệm Rèm Thu Hương đã ghi nhận số ' + phone + '. Nhân viên sẽ đồng bộ lịch sử bảo dưỡng và điểm tích lũy của bạn.');
+            closeAuthModal();
+        }
+    </script>
+</body>
+</html>
